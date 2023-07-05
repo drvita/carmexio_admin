@@ -1,15 +1,16 @@
 <template>
-    <CarImages :files="filesImg" />
+    <EleImages :files="filesImg" :carid="carid" @onDelete="$emit('onUpload')" />
 
-    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" @dragover="dragover"
-        @dragleave="dragleave" @drop="drop">
+    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" draggable
+        @dragover="dragover" @dragleave="dragleave" @drop="drop">
         <div class="text-center text-gray-600">
             <Icon name="wpf:image-file" size="4rem" />
             <div class="mt-4 flex text-sm leading-6">
                 <label for="file-upload"
                     class="relative cursor-pointer rounded-md bg-white font-semibold text-primary-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600 focus-within:ring-offset-2 hover:text-primary-500">
                     <span>{{ $t('Upload a file') }}</span>
-                    <input id="file-upload" multiple accept="image/*" type="file" @change="onChange" class="sr-only" />
+                    <input id="file-upload" multiple accept="image/*" type="file" ref="file" @change="onChange"
+                        class="sr-only" />
                 </label>
                 <p class="pl-1">{{ $t('or drag and drop') }}</p>
             </div>
@@ -28,7 +29,13 @@ export default {
         defaultFiles: {
             type: Array,
             default: [],
-        }
+        },
+        url: {
+            type: String,
+        },
+        carid: {
+            type: Number
+        },
     },
     data() {
         return {
@@ -39,11 +46,11 @@ export default {
     },
     methods: {
         handleSaveMedia() {
-            if (!this.base64.length) return;
+            if (!this.base64.length || !this.url) return;
 
             const media = new mediaHlp();
-            media.set(`cars/${this.id}/media`, this.base64).then(res => {
-                console.log("[API] Car media exit upload");
+            media.set(this.url, this.base64).then(res => {
+                console.log("[API] Car media success upload");
                 this.base64 = [];
                 this.files = [];
                 this.$emit("onUpload");
@@ -66,18 +73,15 @@ export default {
         },
         dragover(e) {
             e.preventDefault();
-            console.log("[DEBUG] dragover");
             this.isDragging = true;
         },
         dragleave() {
-            console.log("[DEBUG] dragleave");
             this.isDragging = false;
         },
         drop(e) {
-            console.log("[DEBUG] drop");
             e.preventDefault();
             this.$refs.file.files = e.dataTransfer.files;
-            this.onChange();
+            this.onChange({ target: this.$refs.file });
             this.isDragging = false;
         },
     },

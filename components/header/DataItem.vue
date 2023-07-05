@@ -1,7 +1,7 @@
 <template>
-    <div class="text-white content-end m-1 md:m-2">
+    <div class="flex flex-col text-white m-1 md:m-2">
         <span class="font-semibold capitalize">{{ name }}:</span>
-        <span class="ml-2 text-gray-300">{{ value }}</span>
+        <span class="ml-2 text-gray-300 text-sm">{{ value }}</span>
     </div>
 </template>
 

@@ -70,6 +70,23 @@ export default () => {
       cancelButtonText,
     });
   };
+  const image = (
+    url,
+    confirmButtonText = "Close",
+    cancelButtonText = "Delete",
+    alt = "image"
+  ) => {
+    return $swal.fire({
+      imageUrl: url,
+      // imageHeight: 1500,
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      imageAlt: alt,
+      confirmButtonText,
+      cancelButtonText,
+    });
+  };
 
   return {
     toast_success,
@@ -78,5 +95,6 @@ export default () => {
     toast_info,
     toast_question,
     modal,
+    image,
   };
 };

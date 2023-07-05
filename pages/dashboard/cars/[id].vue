@@ -50,9 +50,13 @@
                                     @onChange="handleFormChange" @onChangeCurrency="handleFormChange" />
                             </div>
 
-                            <div class="sm:col-span-4">
+                            <div class="sm:col-span-3">
                                 <EleLabel label="Status" to="status" />
                                 <EleSelect :data="dataStatus" id="status" @onChange="handleFormChange" />
+                            </div>
+                            <div class="sm:col-span-3">
+                                <EleCheckbox id="national" text="National" :defaultValue="form.national"
+                                    @onChange="handleFormChange" />
                             </div>
                         </div>
                     </div>
@@ -108,9 +112,31 @@
                         <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
                             <div class="col-span-full">
                                 <EleLabel label="Upload images" to="file-upload" optional />
-                                <EleFile :id="form.id" :defaultFiles="files" @onUpload="getCar()" />
+                                <EleFile :url="`cars/${form.id}/media`" :defaultFiles="files" :carid="form.id"
+                                    @onUpload="getCar()" />
                             </div>
                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+                        <div>
+                            <h2 class="text-base font-semibold leading-7 text-gray-900">{{ $t('Videos') }}</h2>
+                        </div>
+
+                        <div
+                            class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-6 md:content-start sm:grid-cols-6 md:col-span-2">
+                            <div class="col-span-4">
+                                <div v-for="v in inputVideos" class="my-3">
+                                    <EleLabel label="Url" :to="v.id" optional />
+                                    <EleInput :id="v.id" :defaultText="v.url" placeholder="www.youtube.com/watch?v=XXXXXXX"
+                                        @onChange="handleFormChange" />
+                                </div>
+                            </div>
+                            <div class="col-span-2 flex justify-end pr-2">
+                                <Icon name="material-symbols:add-box" size="1.5rem" @click="handleAddVideo()" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -147,7 +173,9 @@ export default {
                 version: "",
                 cylinders: "",
                 type: "",
+                national: false,
             },
+            inputVideos: [],
             brands: [],
             brand: {},
             files: [],
@@ -156,6 +184,23 @@ export default {
         }
     },
     methods: {
+        getDataVideo(url, id) {
+            return {
+                id: id ?? "video_" + Date.now(),
+                url: url ?? "",
+            };
+        },
+        handleAddVideo(url, id) {
+            let videos = [...this.inputVideos];
+            if (id) {
+                videos = videos.filter(v => v.id !== id);
+                videos.push(this.getDataVideo(url, id));
+            } else {
+                videos.push(this.getDataVideo(url));
+            }
+
+            this.inputVideos = videos;
+        },
         handleSave(e) {
             e.preventDefault();
             if (!this.formValidation()) {
@@ -166,6 +211,17 @@ export default {
             const data = this.getModelData();
             const car = new carsHlp();
             const { toast_error, toast_success } = useToast();
+
+            if (this.inputVideos.length) {
+                let videos = this.inputVideos.map(v => v.url);
+                videos = videos.filter(v => v);
+                if (!videos.length) return;
+
+                const media = new mediaHlp();
+                media.setVideo(`cars/${this.form.id}/videos`, videos).then(res => {
+                    console.log("[API] Car videos success upload");
+                });
+            }
 
             car.update(this.form.id, data).then(({ data }) => {
                 if (data) {
@@ -178,9 +234,11 @@ export default {
                 console.error("[Car] error:", err?.message);
                 toast_error(this.$t('Sorry, we have error in server, try again later'));
             });
+
+
         },
         getModelData() {
-            console.log("[DEBUG] create model:", this.form);
+            // console.log("[DEBUG] create model:", this.form);
             return {
                 brand_id: this.form.brand,
                 model: this.form.model,
@@ -194,6 +252,7 @@ export default {
                 version: this.form.version,
                 cylinders: this.form.cylinders,
                 type: this.form.type,
+                national: this.form.national,
             }
         },
         formValidation() {
@@ -228,6 +287,13 @@ export default {
             return true;
         },
         handleFormChange({ target }, key) {
+            if (key === "national") {
+                this.form.national = target.checked;
+                return;
+            } else if (/^video_.*/i.test(key)) {
+                this.handleAddVideo(target.value, key);
+                return;
+            }
             this.form[key] = target.value;
         },
         handleClose() {
@@ -254,7 +320,7 @@ export default {
         },
         setDataModel(model) {
             if (!model) return;
-
+            console.log("[DEBUG] Model", model);
             const data = {
                 ...this.form,
                 id: model.id,
@@ -269,9 +335,18 @@ export default {
                 color: model.color,
                 version: model.version,
                 cylinders: model.cylinders,
-                type: model.type
+                type: model.type,
+                national: Boolean(model.national),
             };
             this.form = data;
+
+            if (model.videos && model.videos.length) {
+                model.videos.forEach(v => {
+                    this.handleAddVideo(v.url, `saved_${v.id}`);
+                });
+            } else {
+                this.handleAddVideo();
+            }
         },
         async getBrands() {
             const brands = new brandsHlp();

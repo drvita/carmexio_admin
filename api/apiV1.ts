@@ -36,7 +36,7 @@ export default class ApiV1 {
 
     console.log("[APIv1] Request:", url.pathname);
     return await fetch(url, dataRequest)
-      .then((res) => res.json())
+      .then((res) => res.status !== 204 && res.json())
       .then((res) => ({
         type: "server ok",
         response: res,
