@@ -1,0 +1,1 @@
+import{r}from"./entry.1d58e583.js";const i=()=>{const o="carmexio",n={token:"",data:{}},a=localStorage.getItem(o),e=r(a?JSON.parse(a):n),s=t=>{localStorage.setItem(o,JSON.stringify(t)),e.value=t};return{setSession:s,deleteSession:async()=>{const t=e.value;t.token="",t.data={},s(t)},getToken:()=>e.value.token,getUser:()=>{const{data:t}=e.value;return t}}};export{i as u};
