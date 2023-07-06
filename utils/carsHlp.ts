@@ -58,4 +58,21 @@ export default class Users extends Api {
       });
     });
   }
+
+  async delete(id: string) {
+    this.method = "DELETE";
+    this.path = "cars/" + id;
+    this.params = {};
+    this.body = {};
+
+    return new Promise(async (done, reject) => {
+      return await this.request().then((res: Response) => {
+        if (res.type === "server error" || res.response?.errors) {
+          return reject(res.response);
+        }
+
+        done(res.response);
+      });
+    });
+  }
 }

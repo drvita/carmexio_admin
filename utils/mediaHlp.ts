@@ -28,7 +28,7 @@ export default class Media extends Api {
   }
 
   async delete(path: string) {
-    this.method = "PUT";
+    this.method = "DELETE";
     this.path = path;
     this.params = {};
     this.body = {};

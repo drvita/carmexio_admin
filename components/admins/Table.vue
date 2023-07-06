@@ -57,6 +57,11 @@
   
 <script>
 export default {
+    props: {
+        saved: {
+            type: Boolean,
+        }
+    },
     data() {
         return {
             data: [],
@@ -98,7 +103,7 @@ export default {
         },
         async getAdmins() {
             const admins = new adminsHlp();
-            const { data, meta, links } = await admins.get(0, { page: this.page });
+            const { data, meta, links } = await admins.get(null, { page: this.page });
             this.data = data ?? [];
             this.paginate = { ...meta ?? {}, links: { ...links ?? {} } };
             this.loading = false;
@@ -107,7 +112,12 @@ export default {
     watch: {
         page() {
             this.getAdmins();
-        }
+        },
+        saved() {
+            if (this.saved) {
+                this.getAdmins();
+            }
+        },
     },
     mounted() {
         this.loading = true;

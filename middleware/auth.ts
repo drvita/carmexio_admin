@@ -10,9 +10,8 @@ export default defineNuxtRouteMiddleware(() => {
 
   const users = new usersHlp();
   console.info("[Auth] Validating...");
-  users.get().then((res: Response) => {
-    const currentUser: User = storage.getUser();
-
+  const currentUser: User = storage.getUser();
+  users.get(0).then((res: Response) => {
     if (!res.data || res.data.id !== currentUser.id) {
       console.error("[Auth] Session not valid");
       storage.deleteSession();

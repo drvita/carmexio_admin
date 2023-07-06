@@ -98,7 +98,7 @@ export default {
         },
         async getUsers() {
             const users = new usersHlp();
-            const { data, meta, links } = await users.get(0, { page: this.page });
+            const { data, meta, links } = await users.get(null, { page: this.page });
             this.data = data ?? [];
             this.paginate = { ...meta ?? {}, links: { ...links ?? {} } };
             this.loading = false;

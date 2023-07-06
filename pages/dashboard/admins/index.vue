@@ -13,11 +13,12 @@
                 </div>
             </div>
             <div class="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
-                <AdminsTable />
+                <AdminsTable :saved="saveAdmin" />
             </div>
             <!-- <p v-for="n in 20" class="my-12">Paginas</p> -->
         </div>
     </NuxtLayout>
+    <AdminsForm v-if="showForm" @onClose="this.showForm = false" @saved="saved = $event" />
 </template>
 
 <script>
@@ -26,9 +27,20 @@ definePageMeta({
 });
 
 export default {
+    data() {
+        return {
+            showForm: false,
+            saved: false,
+        }
+    },
     methods: {
-        handleAdd(id) {
-            console.log("[DEBUG] handle Add", id);
+        handleAdd() {
+            this.showForm = true;
+        }
+    },
+    computed: {
+        saveAdmin() {
+            return !this.showForm && this.saved;
         }
     },
 }

@@ -85,18 +85,28 @@ export default {
             }
         },
         hanleEdit(id) {
-            console.log("[DEBUG] Handle edit:", id);
             navigateTo("/dashboard/cars/" + id);
         },
         hanleDelete(id) {
-            const { toast_success, toast_question } = useToast();
+            const { toast_success, toast_error, toast_question } = useToast();
             toast_question(this.$t('Are you sure do this action?'), this.$t('Yes'))
                 .then((result) => {
                     if (result.isConfirmed) {
                         console.log("[DEBUG] Handle delete:", id);
-                        toast_success(this.$t('Automovil eliminado: ' + id));
+                        const car = new carsHlp();
+
                         this.loading = true;
-                        this.getCars();
+                        car.delete(id).then(() => {
+                            toast_success(this.$t('Automovil eliminado: ' + id));
+
+                            this.getCars();
+                        }).catch(err => {
+                            console.error("[Car] error:", err?.message);
+                            toast_error(this.$t('Sorry, we have error in server, try again later'));
+                            this.loading = false;
+                        });
+
+
                     }
                 });
 

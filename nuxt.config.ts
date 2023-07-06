@@ -27,7 +27,13 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      API_URL: process.env.NUXT_API_URL,
+      API_URL:
+        process.env.NUXT_ENV === "production"
+          ? process.env.NUXT_API_PRODUCTION
+          : process.env.NUXT_API_BASE,
     },
+  },
+  app: {
+    baseURL: process.env.NUXT_ENV === "production" ? "/carmexio_admin/" : "",
   },
 });

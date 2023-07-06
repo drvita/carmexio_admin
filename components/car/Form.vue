@@ -48,7 +48,7 @@
 
         <hr class="my-4" />
         <div class="grid grid-cols-2 gap-2 ">
-            <EleBtnCancel @onClick="handleClose" />
+            <EleBtnCancel large @onClick="handleClose" />
             <EleBtnSave @onClick="handleBtnSave" />
         </div>
     </Modal>
@@ -108,10 +108,10 @@ export default {
                 year: this.form.year,
                 transmition: this.form.transmition,
                 status: this.form.status,
-                color: this.form.color,
+                color: this.form.color ?? "",
                 price_base: this.form.price,
                 currency: this.form.currency,
-                specifications: this.form.specifications,
+                specifications: this.form.specifications && "--",
                 admin_id: getUser().id,
             }
         },
@@ -199,7 +199,7 @@ export default {
             return data;
         },
         title() {
-            return this.form.id ? "Modificar automovil" : "Nuevo automovil";
+            return this.form.id ? this.$t("Edit car") : this.$t("New car");
         },
         placeholdColor() {
             return this.$t('white');

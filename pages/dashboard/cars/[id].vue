@@ -123,17 +123,23 @@
                             <h2 class="text-base font-semibold leading-7 text-gray-900">{{ $t('Videos') }}</h2>
                         </div>
 
-                        <div
-                            class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-6 md:content-start sm:grid-cols-6 md:col-span-2">
-                            <div class="col-span-4">
-                                <div v-for="v in inputVideos" class="my-3">
-                                    <EleLabel label="Url" :to="v.id" optional />
-                                    <EleInput :id="v.id" :defaultText="v.url" placeholder="www.youtube.com/watch?v=XXXXXXX"
-                                        @onChange="handleFormChange" />
+                        <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-6 md:content-start md:grid-cols-6 col-span-2">
+                            <div class="md:col-span-5">
+                                <div v-for="(v, i) in inputVideos" class="my-3 flex space-x-4">
+                                    <div class="hidden md:block pt-6 text-gray-700 cursor-pointer" v-if="v.url"
+                                        @click="handleRemoveVideo(v.id)">
+                                        <Icon name="material-symbols:delete-sweep-outline" size="1.5rem" />
+                                    </div>
+                                    <div class="w-full">
+                                        <EleLabel label="Url" :to="v.id" :optional="!i" />
+                                        <EleInput :id="v.id" :defaultText="v.url"
+                                            placeholder="https://www.youtube.com/watch?v=XXXXXXX"
+                                            @onChange="handleFormChange" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-span-2 flex justify-end pr-2">
-                                <Icon name="material-symbols:add-box" size="1.5rem" @click="handleAddVideo()" />
+                            <div class="hidden md:block md:col-span-1 flex justify-end pr-2 text-blue-700">
+                                <Icon name="material-symbols:add-box" size="2rem" @click="handleAddVideo()" />
                             </div>
                         </div>
 
@@ -184,6 +190,14 @@ export default {
         }
     },
     methods: {
+        handleRemoveVideo(id) {
+            let videos = [...this.inputVideos];
+            videos = videos.filter(v => v.id !== id);
+            this.inputVideos = videos;
+            if (!videos.length) {
+                this.handleAddVideo();
+            }
+        },
         getDataVideo(url, id) {
             return {
                 id: id ?? "video_" + Date.now(),
@@ -212,16 +226,12 @@ export default {
             const car = new carsHlp();
             const { toast_error, toast_success } = useToast();
 
-            if (this.inputVideos.length) {
-                let videos = this.inputVideos.map(v => v.url);
-                videos = videos.filter(v => v);
-                if (!videos.length) return;
-
-                const media = new mediaHlp();
-                media.setVideo(`cars/${this.form.id}/videos`, videos).then(res => {
-                    console.log("[API] Car videos success upload");
-                });
-            }
+            let videos = this.inputVideos.map(v => v.url);
+            videos = videos.filter(v => v);
+            const media = new mediaHlp();
+            media.setVideo(`cars/${this.form.id}/videos`, videos).then(res => {
+                console.log("[API] Car videos success upload");
+            });
 
             car.update(this.form.id, data).then(({ data }) => {
                 if (data) {
@@ -345,6 +355,7 @@ export default {
                     this.handleAddVideo(v.url, `saved_${v.id}`);
                 });
             } else {
+                if (this.inputVideos.length) return;
                 this.handleAddVideo();
             }
         },

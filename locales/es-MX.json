@@ -64,5 +64,8 @@
     "National": "Nacional",
     "Cylinders": "Cilindros",
     "Type": "Tipo",
-    "Close": "Cerrar"
+    "Close": "Cerrar",
+    "Administrators": "Administradores",
+    "Admin saved": "Administrador guardado",
+    "Car saved": "Automovil guardado"
 }
