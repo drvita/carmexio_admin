@@ -8,25 +8,14 @@
 
 <script>
 export default {
-    data() {
-        return {
-            swal: null,
-        };
-    },
     methods: {
         handleClick() {
-            this.swal.fire({
-                text: this.$t('Are you sure do this action?'),
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: this.$t('Yes'),
-                cancelButtonText: this.$t('No')
-            }).then((result) => {
+            const { toast_error, toast_question } = useToast();
+            toast_question(this.$t('Are you sure do this action?'), this.$t('Yes')).then((result) => {
                 if (result.isConfirmed) {
                     console.log("[Logout] Session cerrada");
                     const cx = new loginHlp();
+
 
                     cx.logout()
                         .then((res) => {
@@ -35,13 +24,7 @@ export default {
                         })
                         .catch((err) => {
                             console.error("[Logout] logout failer:", err);
-                            this.swal.fire({
-                                position: 'top-end',
-                                text: this.$t(err.message),
-                                showConfirmButton: false,
-                                timer: 2500,
-                                toast: true,
-                            });
+                            toast_error(this.$t(err?.message ?? 'Server error'));
                             this.email = "";
                             this.password = "";
                         });
@@ -49,9 +32,5 @@ export default {
             });
         },
     },
-    mounted() {
-        const { $swal } = useNuxtApp();
-        this.swal = $swal;
-    }
 }
 </script>

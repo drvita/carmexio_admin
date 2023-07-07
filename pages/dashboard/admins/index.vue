@@ -13,12 +13,12 @@
                 </div>
             </div>
             <div class="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
-                <AdminsTable :saved="saveAdmin" />
+                <AdminsTable :saved="saveAdmin" @onEdit="handleEdit" />
             </div>
             <!-- <p v-for="n in 20" class="my-12">Paginas</p> -->
         </div>
     </NuxtLayout>
-    <AdminsForm v-if="showForm" @onClose="this.showForm = false" @saved="saved = $event" />
+    <AdminsForm v-if="showForm" :data="dataUser" @onClose="this.showForm = false" @saved="saved = $event" />
 </template>
 
 <script>
@@ -31,9 +31,14 @@ export default {
         return {
             showForm: false,
             saved: false,
+            dataUser: {},
         }
     },
     methods: {
+        handleEdit(user) {
+            this.dataUser = user;
+            this.showForm = true;
+        },
         handleAdd() {
             this.showForm = true;
         }

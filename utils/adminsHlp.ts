@@ -16,8 +16,8 @@ export default class Admins extends Api {
 
     return new Promise(async (done, reject) => {
       return await this.request().then((res: Response) => {
-        if (res.type === "server error" || res.response?.errors) {
-          return reject(res.response);
+        if (res.type === "server error") {
+          return reject(res);
         }
 
         done(res.response);
@@ -37,8 +37,42 @@ export default class Admins extends Api {
 
     return new Promise(async (done, reject) => {
       return await this.request().then((res: Response) => {
-        if (res.type === "server error" || res.response?.errors) {
-          return reject(res.response);
+        if (res.type === "server error") {
+          return reject(res);
+        }
+
+        done(res.response);
+      });
+    });
+  }
+
+  async update(id: number, data: RequestPost) {
+    this.method = "PUT";
+    this.path = `admins/${id}`;
+    this.params = {};
+    this.body = data;
+
+    return new Promise(async (done, reject) => {
+      return await this.request().then((res: Response) => {
+        if (res.type === "server error") {
+          return reject(res);
+        }
+
+        done(res.response);
+      });
+    });
+  }
+
+  async delete(id: number) {
+    this.method = "DELETE";
+    this.path = `admins/${id}`;
+    this.params = {};
+    this.body = {};
+
+    return new Promise(async (done, reject) => {
+      return await this.request().then((res: Response) => {
+        if (res.type === "server error") {
+          return reject(res);
         }
 
         done(res.response);

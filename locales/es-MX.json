@@ -67,5 +67,15 @@
     "Close": "Cerrar",
     "Administrators": "Administradores",
     "Admin saved": "Administrador guardado",
-    "Car saved": "Automovil guardado"
+    "Admin updated": "Administrador modificado",
+    "Car saved": "Automovil guardado",
+    "Car updated": "Automovil modificado",
+    "Please, type name with least 6 characters": "Por favor, escriba al menos 6 caracteres",
+    "Please, select a gender": "Por favor, seleccione un genero",
+    "Please, type a email valid": "Por favor, escriba un correo electronico valido",
+    "Edit admin": "Modificar administrador",
+    "New admin": "Nuevo administrador",
+    "Car deleted": "Automovil eliminado",
+    "Admin deleted": "Administrador eliminado",
+    "unverified email": "Correo electronico no verificado"
 }

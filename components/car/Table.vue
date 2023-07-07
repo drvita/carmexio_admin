@@ -92,13 +92,11 @@ export default {
             toast_question(this.$t('Are you sure do this action?'), this.$t('Yes'))
                 .then((result) => {
                     if (result.isConfirmed) {
-                        console.log("[DEBUG] Handle delete:", id);
                         const car = new carsHlp();
-
                         this.loading = true;
                         car.delete(id).then(() => {
-                            toast_success(this.$t('Automovil eliminado: ' + id));
-
+                            console.log("[Car] car deleted:", id);
+                            toast_success(this.$t('Car deleted'));
                             this.getCars();
                         }).catch(err => {
                             console.error("[Car] error:", err?.message);

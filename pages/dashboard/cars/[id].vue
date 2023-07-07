@@ -235,8 +235,8 @@ export default {
 
             car.update(this.form.id, data).then(({ data }) => {
                 if (data) {
-                    console.log("[Car] Car saved:", data.id);
-                    toast_success(this.$t('Car saved'));
+                    console.log("[Car] Car updated:", data.id);
+                    toast_success(this.$t('Car updated'));
                     // this.$emit("saved", data.id);
                     this.handleClose();
                 }

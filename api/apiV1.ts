@@ -36,14 +36,24 @@ export default class ApiV1 {
 
     console.log("[APIv1] Request:", url.pathname);
     return await fetch(url, dataRequest)
-      .then((res) => res.status !== 204 && res.json())
+      .then(async (res) => {
+        if (res.status === 204) {
+          return;
+        }
+
+        if (res.status >= 400) {
+          throw await res.json();
+        }
+
+        return res.json();
+      })
       .then((res) => ({
         type: "server ok",
         response: res,
       }))
-      .catch((err) => ({
+      .catch((e) => ({
+        ...e,
         type: "server error",
-        message: err.message,
       }));
   }
 

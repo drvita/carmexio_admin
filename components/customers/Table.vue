@@ -30,7 +30,7 @@
                     #{{ d.id }}
                 </td>
                 <td class="border-t border-gray-200">
-                    <Icon name="wpf:administrator" />
+                    <Icon name="wpf:name" />
 
                     {{ d.name }}
                 </td>
@@ -98,7 +98,7 @@ export default {
         },
         async getUsers() {
             const users = new usersHlp();
-            const { data, meta, links } = await users.get(null, { page: this.page });
+            const { data, meta, links } = await users.get(null, { page: this.page }).catch(e => ({}));
             this.data = data ?? [];
             this.paginate = { ...meta ?? {}, links: { ...links ?? {} } };
             this.loading = false;

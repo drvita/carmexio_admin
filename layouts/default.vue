@@ -25,8 +25,8 @@
 export default {
     beforeCreate: function () {
         const html = document.getElementsByTagName('html');
-        html[0].classList.add('min-h-screen');
-        // html[0].classList.add('dark'); bg-gray-200
+        // html[0].classList.add('min-h-screen');
+        html[0].classList.remove('dark');
         document.body.className = 'h-screen bg-gray-200';
     },
     computed: {

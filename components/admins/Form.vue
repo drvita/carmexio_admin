@@ -4,7 +4,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <EleLabel label="Name" to="name" />
-                    <EleInput id="name" placeholder="Adolfo Perez" @onChange="handleFormChange" />
+                    <EleInput :defaultText="form.name" id="name" placeholder="Adolfo Perez" @onChange="handleFormChange" />
                 </div>
                 <div>
                     <EleLabel label="Gender" to="gender" />
@@ -15,7 +15,8 @@
 
         <EleGroup>
             <EleLabel label="Email" to="email" />
-            <EleInput id="email" type="email" placeholder="myemail@example.org" @onChange="handleFormChange" />
+            <EleInput :disabled="form.id" :defaultText="form.email" id="email" type="email"
+                placeholder="myemail@example.org" @onChange="handleFormChange" />
         </EleGroup>
 
 
@@ -29,6 +30,11 @@
 
 <script>
 export default {
+    props: {
+        data: {
+            type: Object,
+        },
+    },
     data() {
         return {
             form: {
@@ -46,15 +52,30 @@ export default {
         },
         handleBtnSave() {
             if (!this.formValidation()) {
-                console.error("[Cars] Form inValid");
+                console.error("[Admins] Form inValid");
                 return;
             }
 
-            const car = new adminsHlp();
+            const admin = new adminsHlp();
             const data = this.getModelData();
             const { toast_error, toast_success } = useToast();
 
-            car.set(data).then(({ data }) => {
+            if (this.form.id) {
+                admin.update(this.form.id, data).then(({ data }) => {
+                    if (data) {
+                        console.log("[Admin] Admin updated:", data.id);
+                        toast_success(this.$t('Admin updated'));
+                        this.$emit("saved", data.id);
+                        this.handleClose();
+                    }
+                }).catch(err => {
+                    console.error("[Admin] error put:", err?.message ?? err);
+                    toast_error(this.$t('Sorry, we have error in server, try again later'));
+                });
+                return;
+            }
+
+            admin.set(data).then(({ data }) => {
                 if (data) {
                     console.log("[Admin] Admin saved:", data.id);
                     toast_success(this.$t('Admin saved'));
@@ -62,7 +83,7 @@ export default {
                     this.handleClose();
                 }
             }).catch(err => {
-                console.error("[Admin] error:", err?.message);
+                console.error("[Admin] error post:", err?.message ?? err);
                 toast_error(this.$t('Sorry, we have error in server, try again later'));
             });
         },
@@ -76,6 +97,7 @@ export default {
         formValidation() {
             const { toast_error } = useToast();
             const data = { ...this.form };
+            const rgEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
             if (data.name.length < 6) {
                 toast_error(this.$t('Please, type name with least 6 characters'));
@@ -85,7 +107,7 @@ export default {
                 toast_error(this.$t('Please, select a gender'));
                 return false;
             }
-            if (!data.email) {
+            if (!rgEmail.test(data.email)) {
                 toast_error(this.$t('Please, type a email valid'));
                 return false;
             }
@@ -95,6 +117,16 @@ export default {
         handleClose() {
             this.$emit("onClose");
         },
+        setData() {
+            if (!this.data) return;
+
+            this.form = {
+                id: this.data.id,
+                name: this.data.name,
+                gender: this.data.gender,
+                email: this.data.email,
+            }
+        },
     },
     computed: {
         dataGender() {
@@ -103,7 +135,7 @@ export default {
                 { id: "male", name: this.$t('male') },
             ];
             data.map((d, i) => {
-                if (d.id === this.form.status) {
+                if (d.id === this.form.gender) {
                     data[i].selected = true;
                     return;
                 }
@@ -115,7 +147,8 @@ export default {
             return this.form.id ? this.$t('Edit admin') : this.$t('New admin');
         },
     },
-    // mounted() {
-    // }
+    mounted() {
+        this.setData()
+    }
 }
 </script>

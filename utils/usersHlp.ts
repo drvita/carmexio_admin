@@ -16,7 +16,7 @@ export default class Users extends Api {
     return new Promise(async (done, reject) => {
       return await this.request().then((res: Response) => {
         if (res.type === "server error" || res.response?.errors) {
-          return reject(res.response);
+          return reject(res);
         }
 
         done(res.response);

@@ -86,24 +86,34 @@ export default {
             }
         },
         hanleEdit(id) {
-            console.log("[DEBUG] Handle edit:", id);
+            const data = this.data.find(d => d.id === id);
+            this.$emit("onEdit", data);
         },
         hanleDelete(id) {
             const { toast_success, toast_question } = useToast();
             toast_question(this.$t('Are you sure do this action?'), this.$t('Yes'))
                 .then((result) => {
                     if (result.isConfirmed) {
-                        console.log("[DEBUG] Handle delete:", id);
-                        toast_success(this.$t('Administrador eliminado: ' + id));
+                        const admin = new adminsHlp();
                         this.loading = true;
-                        this.getAdmins();
+                        admin.delete(id).then(() => {
+                            console.log("[Admin] Admin deleted:", id);
+                            toast_success(this.$t('Admin deleted'));
+                            this.getAdmins();
+                        }).catch(err => {
+                            console.error("[Admin] error put:", err?.message ?? err);
+                            toast_error(this.$t('Sorry, we have error in server, try again later'));
+                            this.loading = false;
+                        });
+
+
                     }
                 });
 
         },
         async getAdmins() {
             const admins = new adminsHlp();
-            const { data, meta, links } = await admins.get(null, { page: this.page });
+            const { data, meta, links } = await admins.get(null, { page: this.page }).catch(e => ({}));
             this.data = data ?? [];
             this.paginate = { ...meta ?? {}, links: { ...links ?? {} } };
             this.loading = false;

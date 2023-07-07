@@ -19,8 +19,15 @@ export default class Login extends Api {
 
     return new Promise(async (done, reject) => {
       return await this.request().then((res: Response) => {
-        if (res.type === "server error" || res.response?.errors) {
-          return reject(res.response);
+        if (res.type === "server error") {
+          return reject(res);
+        }
+
+        if (!res.response.data.email_validated) {
+          return reject({
+            ...res.response,
+            message: "unverified email",
+          });
         }
 
         storage.setSession(res.response);
@@ -34,14 +41,20 @@ export default class Login extends Api {
     this.body = {};
 
     return new Promise(async (done, reject) => {
-      return await this.request().then((res: Response) => {
-        if (res.type === "server error" || res.response?.errors) {
-          return reject(res.response);
-        }
+      return await this.request()
+        .then((res: Response) => {
+          if (
+            res.type === "server error" &&
+            res.message !== "Unauthenticated."
+          ) {
+            console.error("[DEBUG] logout failer in help:", res);
+            return reject(res);
+          }
 
-        storage.deleteSession();
-        done(res.response);
-      });
+          storage.deleteSession();
+          done(res.response);
+        })
+        .catch((e) => reject(e));
     });
   }
 }

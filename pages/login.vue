@@ -84,8 +84,9 @@ export default {
                     }
                 })
                 .catch((err) => {
-                    console.error("[Login] login failer:", err);
+                    console.error("[Login] login failer:", err.message);
                     this.swal.fire({
+                        icon: "error",
                         position: 'top-end',
                         text: this.$t(err.message),
                         showConfirmButton: false,
@@ -100,11 +101,12 @@ export default {
     },
     computed: {
         validation() {
-            const rgPass = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W_]).{8,}$/;
+            // const rgPass = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W_]).{8,}$/;
             const rgEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
             if (!rgEmail.test(this.email)) {
                 this.swal.fire({
+                    icon: "warning",
                     position: 'top-end',
                     text: this.$t("Please, type e-mail valid"),
                     showConfirmButton: false,
@@ -116,6 +118,7 @@ export default {
 
             if (this.password.length < 8) {
                 this.swal.fire({
+                    icon: "warning",
                     position: 'top-end',
                     text: this.$t("Please, type password valid"),
                     showConfirmButton: false,
