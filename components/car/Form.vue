@@ -47,9 +47,11 @@
         </EleGroup>
 
         <hr class="my-4" />
+        <div v-if="loading" class="w-full text-right py-2 pr-6 border text-primary-800 font-semibold">{{ $t('Loading')
+        }}...</div>
         <div class="grid grid-cols-2 gap-2 ">
             <EleBtnCancel large @onClick="handleClose" />
-            <EleBtnSave @onClick="handleBtnSave" />
+            <EleBtnSave :disabled="loading" @onClick="handleBtnSave" />
         </div>
     </Modal>
 </template>
@@ -88,6 +90,7 @@ export default {
             const data = this.getModelData();
             const { toast_error, toast_success } = useToast();
 
+            this.loading = true;
             car.set(data).then(({ data }) => {
                 if (data) {
                     console.log("[Car] Car saved:", data.id);
@@ -95,9 +98,11 @@ export default {
                     this.$emit("saved", data.id);
                     this.handleClose();
                 }
+                this.loading = false;
             }).catch(err => {
                 console.error("[Car] error:", err?.message);
                 toast_error(this.$t('Sorry, we have error in server, try again later'));
+                this.loading = false;
             });
         },
         getModelData() {

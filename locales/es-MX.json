@@ -77,5 +77,9 @@
     "New admin": "Nuevo administrador",
     "Car deleted": "Automovil eliminado",
     "Admin deleted": "Administrador eliminado",
-    "unverified email": "Correo electronico no verificado"
+    "unverified email": "Correo electronico no verificado",
+    "User not found": "Usuario no encontrado",
+    "Hash invalid": "Codigo de verificacion invalido",
+    "Server error": "Ups! lo sentimos mucho. Tenemos un error en el servidor. Por favor intentalo mas tarde.",
+    "The password is": "La contraseña es"
 }

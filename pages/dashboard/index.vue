@@ -39,8 +39,8 @@ export default {
             dashboard.analytics().then((data) => {
                 const boxs = [
                     { icon: "wpf:administrator", title: this.$t('Administrators'), number: data.admins_count, url: "/dashboard/admins" },
-                    { icon: "wpf:collaborator", title: this.$t('Sellers'), number: data.sellers_count, url: "/dashboard/sellers" },
-                    { icon: "wpf:name", title: this.$t('Customers'), number: data.customers_count, url: "/dashboard/customers" },
+                    // { icon: "wpf:collaborator", title: this.$t('Sellers'), number: data.sellers_count, url: "/dashboard/sellers" },
+                    // { icon: "wpf:name", title: this.$t('Customers'), number: data.customers_count, url: "/dashboard/customers" },
                     { icon: "wpf:car-rental", title: this.$t('Cars'), iconBg: "gray-200", number: data.cars_count, url: "/dashboard/cars" },
                     // { icon: "wpf:coins", title: "Ventas", iconBg: "gray-200", number: 0 },
                     // { icon: "wpf:connected", title: "Loggeados", number: 0 },

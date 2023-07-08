@@ -21,9 +21,11 @@
 
 
         <hr class="my-4" />
+        <div v-if="loading" class="w-full text-right py-2 pr-6 border text-primary-800 font-semibold">{{ $t('Loading')
+        }}...</div>
         <div class="grid grid-cols-2 gap-2 ">
             <EleBtnCancel large @onClick="handleClose" />
-            <EleBtnSave @onClick="handleBtnSave" />
+            <EleBtnSave :disabled="loading" @onClick="handleBtnSave" />
         </div>
     </Modal>
 </template>
@@ -60,6 +62,7 @@ export default {
             const data = this.getModelData();
             const { toast_error, toast_success } = useToast();
 
+            this.loading = true;
             if (this.form.id) {
                 admin.update(this.form.id, data).then(({ data }) => {
                     if (data) {
@@ -68,9 +71,11 @@ export default {
                         this.$emit("saved", data.id);
                         this.handleClose();
                     }
+                    this.loading = false;
                 }).catch(err => {
                     console.error("[Admin] error put:", err?.message ?? err);
                     toast_error(this.$t('Sorry, we have error in server, try again later'));
+                    this.loading = true;
                 });
                 return;
             }
@@ -78,13 +83,15 @@ export default {
             admin.set(data).then(({ data }) => {
                 if (data) {
                     console.log("[Admin] Admin saved:", data.id);
-                    toast_success(this.$t('Admin saved'));
+                    toast_success(this.$t('Admin saved') + ". \n " + this.$t('The password is') + ": Password.01#");
                     this.$emit("saved", data.id);
                     this.handleClose();
                 }
+                this.loading = false;
             }).catch(err => {
                 console.error("[Admin] error post:", err?.message ?? err);
                 toast_error(this.$t('Sorry, we have error in server, try again later'));
+                this.loading = false;
             });
         },
         getModelData() {

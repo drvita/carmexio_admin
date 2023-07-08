@@ -85,6 +85,10 @@ export default {
                 })
                 .catch((err) => {
                     console.error("[Login] login failer:", err.message);
+                    if (err.message === "unverified email") {
+                        navigateTo('email/verifyRequest?email=' + this.email);
+                        return;
+                    }
                     this.swal.fire({
                         icon: "error",
                         position: 'top-end',

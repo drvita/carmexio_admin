@@ -1,12 +1,13 @@
 export default () => {
   const { $swal } = useNuxtApp();
+  const timer = 4000;
   const toast_success = (text) => {
     return $swal.fire({
       position: "bottom-end",
       icon: "success",
       text,
       showConfirmButton: false,
-      timer: 2500,
+      timer,
       toast: true,
     });
   };
@@ -16,7 +17,7 @@ export default () => {
       icon: "error",
       text,
       showConfirmButton: false,
-      timer: 2500,
+      timer,
       toast: true,
     });
   };
@@ -26,7 +27,7 @@ export default () => {
       icon: "warning",
       text,
       showConfirmButton: false,
-      timer: 2500,
+      timer,
       toast: true,
     });
   };
@@ -36,7 +37,7 @@ export default () => {
       icon: "info",
       text,
       showConfirmButton: false,
-      timer: 2500,
+      timer,
       toast: true,
     });
   };

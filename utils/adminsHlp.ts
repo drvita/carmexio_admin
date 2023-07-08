@@ -32,7 +32,7 @@ export default class Admins extends Api {
     this.body = data;
 
     if (!data.password) {
-      data.password = this.randString(16) + "#";
+      data.password = "Password.01#"; // this.randString(16) + "#";
     }
 
     return new Promise(async (done, reject) => {
@@ -66,6 +66,40 @@ export default class Admins extends Api {
   async delete(id: number) {
     this.method = "DELETE";
     this.path = `admins/${id}`;
+    this.params = {};
+    this.body = {};
+
+    return new Promise(async (done, reject) => {
+      return await this.request().then((res: Response) => {
+        if (res.type === "server error") {
+          return reject(res);
+        }
+
+        done(res.response);
+      });
+    });
+  }
+
+  async verify(path: string) {
+    this.method = "POST";
+    this.path = `admins/${path}`;
+    this.params = {};
+    this.body = {};
+
+    return new Promise(async (done, reject) => {
+      return await this.request().then((res: Response) => {
+        if (res.type === "server error") {
+          return reject(res);
+        }
+
+        done(res.response);
+      });
+    });
+  }
+
+  async verifyRequest(email: string) {
+    this.method = "POST";
+    this.path = `admins/verify/${email}`;
     this.params = {};
     this.body = {};
 
