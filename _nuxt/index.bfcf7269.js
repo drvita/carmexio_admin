@@ -1,1 +1,0 @@
-import{n as e,C as n,s as a,_ as s,k as r,v as _,t as c}from"./entry.7e45b807.js";import{_ as i}from"./_plugin-vue_export-helper.c27b6911.js";const p={mounted(){setTimeout(()=>e("/login"),3500)}};function u(t,m,d,f,l,x){const o=s;return r(),n(o,{name:"login"},{default:a(()=>[_(c(t.$t("Loading")),1)]),_:1})}const k=i(p,[["render",u]]);export{k as default};
