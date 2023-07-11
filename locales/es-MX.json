@@ -81,5 +81,11 @@
     "User not found": "Usuario no encontrado",
     "Hash invalid": "Codigo de verificacion invalido",
     "Server error": "Ups! lo sentimos mucho. Tenemos un error en el servidor. Por favor intentalo mas tarde.",
-    "The password is": "La contraseña es"
+    "The password is": "La contraseña es",
+    "Request email verification": "Solcitud de verificacion de correo electronio",
+    "Send request": "Enviar solicitud",
+    "Sending": "Enviando",
+    "Required": "Obligatorio",
+    "New car": "Nuevo automovil",
+    "Edit car": "Modificar automovil"
 }

@@ -1,9 +1,11 @@
 export default () => {
   const { $swal } = useNuxtApp();
-  const timer = 4000;
-  const toast_success = (text) => {
+  const timer = 3500;
+  const position = "bottom-end";
+
+  const toast_success = (text, p) => {
     return $swal.fire({
-      position: "bottom-end",
+      position: p ?? position,
       icon: "success",
       text,
       showConfirmButton: false,
@@ -11,9 +13,9 @@ export default () => {
       toast: true,
     });
   };
-  const toast_error = (text) => {
+  const toast_error = (text, p) => {
     return $swal.fire({
-      position: "bottom-end",
+      position: p ?? position,
       icon: "error",
       text,
       showConfirmButton: false,
@@ -21,9 +23,9 @@ export default () => {
       toast: true,
     });
   };
-  const toast_warning = (text) => {
+  const toast_warning = (text, p) => {
     return $swal.fire({
-      position: "bottom-end",
+      position: p ?? position,
       icon: "warning",
       text,
       showConfirmButton: false,
@@ -31,9 +33,9 @@ export default () => {
       toast: true,
     });
   };
-  const toast_info = (text) => {
+  const toast_info = (text, p) => {
     return $swal.fire({
-      position: "bottom-end",
+      position: p ?? position,
       icon: "info",
       text,
       showConfirmButton: false,
@@ -79,7 +81,6 @@ export default () => {
   ) => {
     return $swal.fire({
       imageUrl: url,
-      // imageHeight: 1500,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",

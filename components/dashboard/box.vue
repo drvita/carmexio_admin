@@ -1,11 +1,13 @@
 <template>
-    <div class="border drop-shadow-md rounded-lg p-2">
-        <div class="h-16 px-2 py-3 flex">
-            <div class="flex flex-col w-4/6">
-                <span class="">{{ title }}</span>
-                <span class="text-lg">{{ number }}</span>
+    <div class="border drop-shadow-md rounded-lg p-2 cursor-pointer">
+        <div class="h-16 px-2 pb-6 pt-2 flex">
+            <div class="flex space-x-2 md:flex-col w-4/6">
+                <span class="md:text-lg">{{ title }}</span>
+                <div>
+                    <span class="text-lg md:text-2xl">{{ number }}</span>
+                </div>
             </div>
-            <div v-if="icon" class="w-2/6">
+            <div v-if="icon" class="w-2/6 text-right">
                 <span class="rounded-full border drop-shadow-md px-3 py-2 text-2xl" :class="classIcon">
                     <Icon :name="icon" />
                 </span>

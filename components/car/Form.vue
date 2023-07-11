@@ -1,57 +1,58 @@
 <template>
     <Modal :title="title" @onClose="handleClose">
-        <EleGroup>
-            <EleLabel label="Brand" to="brand" />
-            <EleSelect :data="dataBrand" id="brand" @onChange="handleFormChange" />
-        </EleGroup>
+        <div :class="loading ? 'opacity-50' : ''">
+            <EleGroup>
+                <EleLabel label="Brand" to="brand" />
+                <EleSelect :data="dataBrand" id="brand" @onChange="handleFormChange" />
+            </EleGroup>
 
-        <EleGroup>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <EleLabel label="Model" to="model" />
-                    <EleInput id="model" :placeholder="placeholdModel" @onChange="handleFormChange" />
+            <EleGroup>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <EleLabel label="Model" to="model" />
+                        <EleInput id="model" :placeholder="placeholdModel" @onChange="handleFormChange" />
+                    </div>
+                    <div>
+                        <EleLabel label="Year" to="year" />
+                        <EleInput id="year" placeholder="2017" @onChange="handleFormChange" />
+                    </div>
                 </div>
-                <div>
-                    <EleLabel label="Year" to="year" />
-                    <EleInput id="year" placeholder="2017" @onChange="handleFormChange" />
+            </EleGroup>
+
+            <EleGroup>
+                <EleLabel label="Transmition" to="transmition" />
+                <EleSelect :data="dataTransmition" id="transmition" @onChange="handleFormChange" />
+            </EleGroup>
+
+            <EleGroup>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <EleLabel label="Status" to="status" />
+                        <EleSelect :data="dataStatus" id="status" @onChange="handleFormChange" />
+                    </div>
+                    <div>
+                        <EleLabel label="Color" to="color" optional />
+                        <EleInput id="color" :placeholder="placeholdColor" @onChange="handleFormChange" />
+                    </div>
                 </div>
+            </EleGroup>
+
+            <EleGroup>
+                <EleLabel label="Price" to="price" />
+                <EleInputCurrency id="price" @onChange="handleFormChange" @onChangeCurrency="handleFormChange" />
+            </EleGroup>
+
+            <EleGroup>
+                <EleLabel label="Specifications" to="specifications" optional />
+                <EleTextarea id="specifications" @onChange="handleFormChange" />
+            </EleGroup>
+
+            <hr class="my-4" />
+            <EleDivLoading v-if="loading" />
+            <div class="grid grid-cols-2 gap-2 ">
+                <EleBtnCancel large @onClick="handleClose" />
+                <EleBtnSave :disabled="btnDisabled" @onClick="handleBtnSave" />
             </div>
-        </EleGroup>
-
-        <EleGroup>
-            <EleLabel label="Transmition" to="transmition" />
-            <EleSelect :data="dataTransmition" id="transmition" @onChange="handleFormChange" />
-        </EleGroup>
-
-        <EleGroup>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <EleLabel label="Status" to="status" />
-                    <EleSelect :data="dataStatus" id="status" @onChange="handleFormChange" />
-                </div>
-                <div>
-                    <EleLabel label="Color" to="color" optional />
-                    <EleInput id="color" :placeholder="placeholdColor" @onChange="handleFormChange" />
-                </div>
-            </div>
-        </EleGroup>
-
-        <EleGroup>
-            <EleLabel label="Price" to="price" />
-            <EleInputCurrency id="price" @onChange="handleFormChange" @onChangeCurrency="handleFormChange" />
-        </EleGroup>
-
-        <EleGroup>
-            <EleLabel label="Specifications" to="specifications" optional />
-            <EleTextarea id="specifications" @onChange="handleFormChange" />
-        </EleGroup>
-
-        <hr class="my-4" />
-        <div v-if="loading" class="w-full text-right py-2 pr-6 border text-primary-800 font-semibold">{{ $t('Loading')
-        }}...</div>
-        <div class="grid grid-cols-2 gap-2 ">
-            <EleBtnCancel large @onClick="handleClose" />
-            <EleBtnSave :disabled="loading" @onClick="handleBtnSave" />
         </div>
     </Modal>
 </template>
@@ -81,14 +82,17 @@ export default {
             this.form[key] = target.value;
         },
         handleBtnSave() {
-            if (!this.formValidation()) {
+            const { toast_error, toast_success } = useToast();
+            const form = this.validate;
+
+            if (!form.status) {
                 console.error("[Cars] Form inValid");
+                toast_error(form.message);
                 return;
             }
 
             const car = new carsHlp();
             const data = this.getModelData();
-            const { toast_error, toast_success } = useToast();
 
             this.loading = true;
             car.set(data).then(({ data }) => {
@@ -119,37 +123,6 @@ export default {
                 specifications: this.form.specifications && "--",
                 admin_id: getUser().id,
             }
-        },
-        formValidation() {
-            const { toast_error } = useToast();
-            const data = { ...this.form };
-
-            if (!data.brand) {
-                toast_error(this.$t('Please, select a brand'));
-                return false;
-            }
-            if (!data.model) {
-                toast_error(this.$t('Please, type model'));
-                return false;
-            }
-            if (!data.year) {
-                toast_error(this.$t('Please, type year'));
-                return false;
-            }
-            if (!data.transmition) {
-                toast_error(this.$t('Please, select a transmition'));
-                return false;
-            }
-            if (!data.status) {
-                toast_error(this.$t('Please, select a status'));
-                return false;
-            }
-            if (!data.price) {
-                toast_error(this.$t('Please, type price'));
-                return false
-            }
-
-            return true;
         },
         handleClose() {
             this.$emit("onClose");
@@ -211,6 +184,44 @@ export default {
         },
         placeholdModel() {
             return this.$t('classic jetta');
+        },
+        validate() {
+            const data = { ...this.form };
+            const response = {
+                status: false,
+                message: "",
+            };
+
+            if (!data.brand) {
+                response.message = this.$t('Please, select a brand');
+                return response;
+            }
+            if (!data.model) {
+                response.message = this.$t('Please, type model');
+                return response;
+            }
+            if (!data.year) {
+                response.message = this.$t('Please, type year');
+                return response;
+            }
+            if (!data.transmition) {
+                response.message = this.$t('Please, select a transmition');
+                return response;
+            }
+            if (!data.status) {
+                response.message = this.$t('Please, select a status');
+                return response;
+            }
+            if (!data.price) {
+                response.message = this.$t('Please, type price');
+                return response;
+            }
+
+            response.status = true;
+            return response;
+        },
+        btnDisabled() {
+            return this.loading || !this.validate.status;
         }
     },
     mounted() {

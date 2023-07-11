@@ -248,7 +248,6 @@ export default {
 
         },
         getModelData() {
-            // console.log("[DEBUG] create model:", this.form);
             return {
                 brand_id: this.form.brand,
                 model: this.form.model,
@@ -322,7 +321,6 @@ export default {
                 this.brand = data?.brand ?? {};
                 this.createdBy = data?.admin ?? {};
                 this.files = data.media;
-                // console.log("[DEBUG] Data:", data);
             }).catch(err => {
                 console.error("[Car] error:", err.message);
                 toast_error(this.$t('Sorry, we have error in server, try again later'));
@@ -330,7 +328,6 @@ export default {
         },
         setDataModel(model) {
             if (!model) return;
-            console.log("[DEBUG] Model", model);
             const data = {
                 ...this.form,
                 id: model.id,

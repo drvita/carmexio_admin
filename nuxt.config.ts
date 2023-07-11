@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   css: ["@/assets/css/main.css"],
   postcss: {
     plugins: {
@@ -31,9 +31,15 @@ export default defineNuxtConfig({
         process.env.NUXT_ENV === "production"
           ? process.env.NUXT_API_PRODUCTION
           : process.env.NUXT_API_BASE,
+      NAME_CORP: "Carmexio",
     },
   },
   app: {
     baseURL: process.env.NUXT_ENV === "production" ? "/carmexio_admin/" : "",
   },
+  // hooks: {
+  //   ready: async (nuxt) => {
+  //     console.log("READY");
+  //   },
+  // },
 });

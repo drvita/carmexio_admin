@@ -1,31 +1,33 @@
 <template>
     <Modal :title="title" @onClose="handleClose">
-        <EleGroup>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <EleLabel label="Name" to="name" />
-                    <EleInput :defaultText="form.name" id="name" placeholder="Adolfo Perez" @onChange="handleFormChange" />
+        <div :class="loading ? 'opacity-50' : ''">
+            <EleGroup>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <EleLabel label="Name" to="name" :required="!form.name" />
+                        <EleInput :defaultText="form.name" id="name" placeholder="Adolfo Perez"
+                            @onChange="handleFormChange" />
+                    </div>
+                    <div>
+                        <EleLabel label="Gender" to="gender" :required="!form.gender" />
+                        <EleSelect :data="dataGender" id="gender" @onChange="handleFormChange" />
+                    </div>
                 </div>
-                <div>
-                    <EleLabel label="Gender" to="gender" />
-                    <EleSelect :data="dataGender" id="gender" @onChange="handleFormChange" />
-                </div>
+            </EleGroup>
+
+            <EleGroup>
+                <EleLabel label="Email" to="email" :required="!form.email" />
+                <EleInput :disabled="form.id" :defaultText="form.email" id="email" type="email"
+                    placeholder="myemail@example.org" @onChange="handleFormChange" />
+            </EleGroup>
+
+
+            <hr class="my-4" />
+            <EleDivLoading v-if="loading" />
+            <div class="grid grid-cols-2 gap-2 ">
+                <EleBtnCancel large @onClick="handleClose" />
+                <EleBtnSave :disabled="btnDisabled" @onClick="handleBtnSave" />
             </div>
-        </EleGroup>
-
-        <EleGroup>
-            <EleLabel label="Email" to="email" />
-            <EleInput :disabled="form.id" :defaultText="form.email" id="email" type="email"
-                placeholder="myemail@example.org" @onChange="handleFormChange" />
-        </EleGroup>
-
-
-        <hr class="my-4" />
-        <div v-if="loading" class="w-full text-right py-2 pr-6 border text-primary-800 font-semibold">{{ $t('Loading')
-        }}...</div>
-        <div class="grid grid-cols-2 gap-2 ">
-            <EleBtnCancel large @onClick="handleClose" />
-            <EleBtnSave :disabled="loading" @onClick="handleBtnSave" />
         </div>
     </Modal>
 </template>
@@ -53,14 +55,17 @@ export default {
             this.form[key] = target.value;
         },
         handleBtnSave() {
-            if (!this.formValidation()) {
+            const form = this.validate;
+            const { toast_error, toast_success } = useToast();
+
+            if (!form.status) {
                 console.error("[Admins] Form inValid");
+                toast_error(form.message);
                 return;
             }
 
             const admin = new adminsHlp();
             const data = this.getModelData();
-            const { toast_error, toast_success } = useToast();
 
             this.loading = true;
             if (this.form.id) {
@@ -101,26 +106,6 @@ export default {
                 email: this.form.email,
             }
         },
-        formValidation() {
-            const { toast_error } = useToast();
-            const data = { ...this.form };
-            const rgEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-            if (data.name.length < 6) {
-                toast_error(this.$t('Please, type name with least 6 characters'));
-                return false;
-            }
-            if (!data.gender) {
-                toast_error(this.$t('Please, select a gender'));
-                return false;
-            }
-            if (!rgEmail.test(data.email)) {
-                toast_error(this.$t('Please, type a email valid'));
-                return false;
-            }
-
-            return true;
-        },
         handleClose() {
             this.$emit("onClose");
         },
@@ -152,6 +137,33 @@ export default {
         },
         title() {
             return this.form.id ? this.$t('Edit admin') : this.$t('New admin');
+        },
+        validate() {
+            const data = { ...this.form };
+            const rgEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            const response = {
+                status: false,
+                message: "",
+            };
+
+            if (data.name?.length < 6) {
+                response.message = this.$t('Please, type name with least 6 characters');
+                return response;
+            }
+            if (!data.gender) {
+                response.message = this.$t('Please, select a gender');
+                return response;
+            }
+            if (!rgEmail.test(data.email)) {
+                response.message = this.$t('Please, type a email valid');
+                return response;
+            }
+
+            response.status = true;
+            return response;
+        },
+        btnDisabled() {
+            return this.loading || !this.validate.status;
         },
     },
     mounted() {

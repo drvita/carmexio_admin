@@ -37,8 +37,8 @@
                             {{ $t('Forgot password?') }}
                         </a>
                     </div> -->
-                    <button type="submit"
-                        class="w-full text-white bg-primary-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    <button type="submit" :disabled="btnDisabled"
+                        class="w-full text-white bg-primary-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-30 disabled:bg-primary-900">
                         {{ $t('Sign in') }}
                     </button>
                     <!-- <p class="text-sm font-light text-gray-500 dark:text-gray-400">
@@ -47,6 +47,9 @@
                             {{ $t('Sign in') }}
                         </a>
                     </p> -->
+                    <p v-if="loading" class="text-white text-sm text-right pr-2">
+                        {{ $t('Loading') }} ...
+                    </p>
                 </form>
             </div>
         </div>
@@ -62,7 +65,7 @@ export default {
         return {
             email: "",
             password: "",
-            swal: null,
+            loading: false,
         };
     },
     methods: {
@@ -70,12 +73,16 @@ export default {
             e.preventDefault();
             const cx = new loginHlp();
             const credetials = { email: this.email, password: this.password };
+            const form = this.validation;
+            const { toast_error, toast_warning } = useToast();
 
-            if (!this.validation) {
+            if (!form.status) {
                 console.error("[Login] Validacion fallo");
+                toast_warning(form.message, 'top-end');
                 return;
             }
 
+            this.loading = true;
             cx.login(credetials)
                 .then((res) => {
                     if (res.data && res.token) {
@@ -85,20 +92,17 @@ export default {
                 })
                 .catch((err) => {
                     console.error("[Login] login failer:", err.message);
+                    toast_error(this.$t(err.message), 'top-end');
+
                     if (err.message === "unverified email") {
-                        navigateTo('email/verifyRequest?email=' + this.email);
+                        setTimeout(() => {
+                            navigateTo('email/verifyRequest?email=' + this.email);
+                        }, 3500);
                         return;
                     }
-                    this.swal.fire({
-                        icon: "error",
-                        position: 'top-end',
-                        text: this.$t(err.message),
-                        showConfirmButton: false,
-                        timer: 2500,
-                        toast: true,
-                    });
                     this.email = "";
                     this.password = "";
+                    this.loading = false;
                 });
 
         },
@@ -107,38 +111,29 @@ export default {
         validation() {
             // const rgPass = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W_]).{8,}$/;
             const rgEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            const { } = useToast();
+            const response = { status: true, message: "" };
 
             if (!rgEmail.test(this.email)) {
-                this.swal.fire({
-                    icon: "warning",
-                    position: 'top-end',
-                    text: this.$t("Please, type e-mail valid"),
-                    showConfirmButton: false,
-                    timer: 2500,
-                    toast: true,
-                });
-                return false;
+                response.status = false;
+                response.message = this.$t("Please, type e-mail valid");
+                return response;
             }
 
             if (this.password.length < 8) {
-                this.swal.fire({
-                    icon: "warning",
-                    position: 'top-end',
-                    text: this.$t("Please, type password valid"),
-                    showConfirmButton: false,
-                    timer: 2500,
-                    toast: true,
-                });
-                return false;
+                response.status = false;
+                response.message = this.$t("Please, type password valid");
+                return response;
             }
 
-            return true;
+            return response;
 
+        },
+        btnDisabled() {
+            return this.loading || !this.validation.status;
         }
     },
     mounted() {
-        const { $swal } = useNuxtApp();
-        this.swal = $swal;
         console.log("[Login] Mounted form login");
 
     }

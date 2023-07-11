@@ -9,7 +9,7 @@
                     </h2>
                 </div>
             </div>
-            <div class="py-10 px-2 grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-4">
+            <div :class="classBox" class="py-10 px-2 grid grid-cols-1 gap-1 md:gap-4">
                 <DashboardBox v-for="d in data" :icon="d.icon" :title="d.title" :number="d.number" :icon-bg="d.iconBg"
                     @Click="handleClick(d)" />
             </div>
@@ -32,7 +32,6 @@ export default {
         handleClick(d) {
             if (!d.url) return;
             navigateTo(d.url);
-            console.log("[DEBUG] Click", d.url);
         },
         getData() {
             const dashboard = new dashboardHlp();
@@ -48,6 +47,22 @@ export default {
                 this.data = boxs;
             });
 
+        },
+    },
+    computed: {
+        classBox() {
+            let classBox;
+            if (this.data?.length > 2) {
+                classBox = {
+                    'md:grid-cols-3': true,
+                }
+            } else {
+                classBox = {
+                    'md:grid-cols-2': true,
+                }
+            }
+
+            return classBox;
         },
     },
     mounted() {
