@@ -1,4 +1,4 @@
-import { User, Storage } from "../interfaces/storage";
+import { User, Storage, Role } from "../interfaces/storage";
 
 export default () => {
   const nameStorage = "carmexio";
@@ -30,11 +30,18 @@ export default () => {
     const { data }: Storage = storage.value;
     return data;
   };
+  const hasRole = (role: string = ""): boolean => {
+    const { data }: Storage = storage.value;
+    const acl = data.roles?.find(r => r.name === role);
+
+    return acl ? true : false;
+  };
 
   return {
     setSession,
     deleteSession,
     getToken,
     getUser,
+    hasRole,
   };
 };

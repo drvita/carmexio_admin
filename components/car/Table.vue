@@ -111,7 +111,11 @@ export default {
         },
         async getCars() {
             const cars = new carsHlp();
-            const { data, meta, links } = await cars.get(0, { page: this.page });
+            const { getUser } = useStorage();
+            const { data, meta, links } = await cars.get(0, { 
+                page: this.page,
+                admin_id: getUser().id 
+            });
             this.data = data ?? [];
             this.paginate = { ...meta ?? {}, links: { ...links ?? {} } };
             this.loading = false;

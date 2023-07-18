@@ -23,7 +23,7 @@
 
 <script>
 definePageMeta({
-    middleware: ["auth"],
+    middleware: ["auth","role-root"],
 });
 
 export default {

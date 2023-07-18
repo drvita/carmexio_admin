@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div :class="classBox" class="py-10 px-2 grid grid-cols-1 gap-1 md:gap-4">
-                <DashboardBox v-for="d in data" :icon="d.icon" :title="d.title" :number="d.number" :icon-bg="d.iconBg"
+                <DashboardBox v-for="d in box" :icon="d.icon" :title="d.title" :number="d.number" :icon-bg="d.iconBg"
                     @Click="handleClick(d)" />
             </div>
         </div>
@@ -35,12 +35,15 @@ export default {
         },
         getData() {
             const dashboard = new dashboardHlp();
+            const storage = useStorage();
+            const hasRoot = storage.hasRole('root');
+
             dashboard.analytics().then((data) => {
                 const boxs = [
-                    { icon: "wpf:administrator", title: this.$t('Administrators'), number: data.admins_count, url: "/dashboard/admins" },
+                    { icon: "wpf:administrator", title: this.$t('Administrators'), number: data.admins_count, url: "/dashboard/admins", show: hasRoot },
                     // { icon: "wpf:collaborator", title: this.$t('Sellers'), number: data.sellers_count, url: "/dashboard/sellers" },
                     // { icon: "wpf:name", title: this.$t('Customers'), number: data.customers_count, url: "/dashboard/customers" },
-                    { icon: "wpf:car-rental", title: this.$t('Cars'), iconBg: "gray-200", number: data.cars_count, url: "/dashboard/cars" },
+                    { icon: "wpf:car-rental", title: this.$t('Cars'), iconBg: "gray-200", number: data.cars_count, url: "/dashboard/cars", show: true },
                     // { icon: "wpf:coins", title: "Ventas", iconBg: "gray-200", number: 0 },
                     // { icon: "wpf:connected", title: "Loggeados", number: 0 },
                 ];
@@ -63,6 +66,9 @@ export default {
             }
 
             return classBox;
+        },
+        box(){
+            return this.data.filter(d => d.show);
         },
     },
     mounted() {
