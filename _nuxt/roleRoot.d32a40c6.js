@@ -1,0 +1,1 @@
+import{J as o,n as e}from"./entry.0a49ef2e.js";import{u as a}from"./useStorage.fdfc57c0.js";const d=o(()=>{if(!a().hasRole("root"))return console.log("[Middelware] Role unauthorizade"),console.log("[Middelware] send to dashboard"),e("/dashboard")});export{d as default};
