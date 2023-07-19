@@ -1,27 +1,25 @@
 <template>
     <NuxtLayout>
-        <div class="px-4 sm:px-6 lg:px-8">
-            <div class="sm:flex sm:items-center">
-                <div class="sm:flex-auto flex text-indigo-900">
+        <div class="px-4 sm:px-6 md:px-8">
+            <div class="flex flex-col md:flex-row items-start">
+                <div class="flex-auto flex w-full text-indigo-900">
                     <Icon name="wpf:car-rental" size="1.5rem" />
                     <h2 class="text-2xl font-semibold leading-6 ml-2">
                         {{ brand.name }} - {{ form.model }}
                     </h2>
                 </div>
-                <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                <div class="flex space-x-2 justify-end w-full pt-2 md:pt-0">
                     <EleBtnBack large @onClick="handleClose" />
                 </div>
             </div>
-            <form class="-mx-4 mt-10" @submit="handleSave">
-                <div class="space-y-12">
+            <form class="md:-mx-4 mt-4 md:mt-10" @submit="handleSave">
+                <div class="md:space-y-12">
                     <div class="grid grid-cols-1 gap-x-8 border-b border-gray-900/10 gap-y-10 pb-12 md:grid-cols-3">
                         <div>
                             <h2 class="text-base font-semibold leading-7 text-gray-900">{{ $t('Basic') }}</h2>
-                            <!-- <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so
-                                be careful what you share.</p> -->
                         </div>
 
-                        <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+                        <div class="grid md:max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
                             <div class="sm:col-span-4">
                                 <EleLabel label="Brand" to="brand" />
                                 <EleSelect :data="dataBrand" id="brand" @onChange="handleFormChange" />

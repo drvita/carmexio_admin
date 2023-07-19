@@ -20,7 +20,6 @@ export default {
     },
     methods: {
         handleWatch(file) {
-            console.log("[DEBUG] Request modal:", file);
             if (!file?.url) return;
             const { image } = useToast();
 

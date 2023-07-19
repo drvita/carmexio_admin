@@ -1,4 +1,5 @@
 <template>
+  <VitePwaManifest />
   <suspense>
     <template #default>
       <NuxtPage />

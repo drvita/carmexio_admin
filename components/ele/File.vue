@@ -5,14 +5,14 @@
         @dragover="dragover" @dragleave="dragleave" @drop="drop">
         <div class="text-center text-gray-600">
             <Icon name="wpf:image-file" size="4rem" />
-            <div class="mt-4 flex text-sm leading-6">
+            <div class="mt-4 flex text-sm leading-6 justify-center">
                 <label for="file-upload"
-                    class="relative cursor-pointer rounded-md bg-white font-semibold text-primary-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600 focus-within:ring-offset-2 hover:text-primary-500">
-                    <span>{{ $t('Upload a file') }}</span>
+                    class="relative cursor-pointer rounded-md bg-white font-semibold text-primary-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600 focus-within:ring-offset-2 hover:text-primary-500 ">
+                    <span class="text-center w-full block">{{ $t('Upload a file') }}</span>
                     <input id="file-upload" multiple accept="image/*" type="file" ref="file" @change="onChange"
                         class="sr-only" />
                 </label>
-                <p class="pl-1">{{ $t('or drag and drop') }}</p>
+                <p class="hidden md:block pl-1">{{ $t('or drag and drop') }}</p>
             </div>
             <p class="text-xs leading-5">PNG, JPG, GIF {{ $t('up to') }} 10MB</p>
         </div>

@@ -47,7 +47,7 @@ export default class Login extends Api {
             res.type === "server error" &&
             res.message !== "Unauthenticated."
           ) {
-            console.error("[DEBUG] logout failer in help:", res);
+            console.error("[Auth] logout failer in help:", res);
             return reject(res);
           }
 

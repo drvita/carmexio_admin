@@ -29,7 +29,7 @@
                 </td>
             </tr>
             <tr v-for="d in data" :key="d.id">
-                <td class="border-t border-gray-200 py-2 pl-2 uppercase">
+                <td :class="clasStatus(d.status)" class="border-t border-gray-200 py-2 pl-2 uppercase">
                     {{ d.brand.name }}
                 </td>
                 <td class="hidden lg:table-cell border-t border-gray-200 lowercase">
@@ -111,11 +111,13 @@ export default {
         },
         async getCars() {
             const cars = new carsHlp();
-            const { getUser } = useStorage();
-            const { data, meta, links } = await cars.get(0, { 
-                page: this.page,
-                admin_id: getUser().id 
-            });
+            const { getUser, hasRole } = useStorage();
+            const user = getUser();
+            const params = { page: this.page };
+            if(!hasRole('root')){
+                params.admin_id= user.id;
+            }
+            const { data, meta, links } = await cars.get(0, params);
             this.data = data ?? [];
             this.paginate = { ...meta ?? {}, links: { ...links ?? {} } };
             this.loading = false;

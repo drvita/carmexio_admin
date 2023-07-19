@@ -9,7 +9,7 @@
             </div>
 
             <footer
-                class="flex justify-center items-end text-gray-400 w-full bg-gray-900 h-10 md:h-18 statics bottom-0 pb-1 md:pb-2">
+                class="flex justify-center items-end space-x-2 text-xs md:text-sm text-gray-400 w-full bg-gray-900 h-14 md:h-18 statics bottom-0 pb-2 px-2">
                 <span class="">{{ $t('All right reserved') }}</span>
                 <span class="ml-2">{{ company }}</span>
                 <span class="">@{{ year }}</span>

@@ -37,7 +37,7 @@ export default {
         },
         defaultCurrency: {
             type: String,
-            default: "USD",
+            default: "MXN",
         },
     },
     methods: {

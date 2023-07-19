@@ -10,7 +10,21 @@ export default defineNuxtConfig({
     },
   },
   ssr: false,
-  modules: ["@nuxtjs/i18n", "nuxt-icon"],
+  modules: ["@nuxtjs/i18n", "nuxt-icon","@vite-pwa/nuxt"],
+  pwa: {
+    manifest:{
+      name: "Buscoauto.com.mx",
+      short_name: "buscoauto",
+      description: "Aplicacion para buscar automovil seminuevo o usado en la region"
+    },
+    workbox:{
+      navigateFallback: "/",
+    },
+    devOptions: {
+      enabled: true,
+      type: "module",
+    }
+  },
   i18n: {
     lazy: true,
     langDir: "locales",
@@ -31,15 +45,10 @@ export default defineNuxtConfig({
         process.env.NUXT_ENV === "production"
           ? process.env.NUXT_API_PRODUCTION
           : process.env.NUXT_API_BASE,
-      NAME_CORP: "Carmexio",
+      NAME_CORP: process.env.NUXT_APP_NAME ?? "buscoauto",
     },
   },
   app: {
     baseURL: process.env.NUXT_ENV === "production" ? "/carmexio_admin/" : "",
-  },
-  // hooks: {
-  //   ready: async (nuxt) => {
-  //     console.log("READY");
-  //   },
-  // },
+  }
 });

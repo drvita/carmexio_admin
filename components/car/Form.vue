@@ -70,7 +70,7 @@ export default {
                 status: "for sale",
                 color: "",
                 price: "",
-                currency: "USD",
+                currency: "MXN",
                 specifications: "",
             },
             data: [],
@@ -120,7 +120,7 @@ export default {
                 color: this.form.color ?? "",
                 price_base: this.form.price,
                 currency: this.form.currency,
-                specifications: this.form.specifications && "--",
+                specifications: this.form.specifications ?? "--",
                 admin_id: getUser().id,
             }
         },

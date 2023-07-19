@@ -1,6 +1,6 @@
 <template>
-    <div class="relative bg-gray-800 pb-8 pt-20">
-        <div class="grid grid-cols-2 grid-rows-2 p-2 md:p-0 md:flex md:flex-row md:space-x-4 md:justify-center">
+    <div class="relative bg-gray-800 md:pb-4 pt-12 md:pt-14">
+        <div class="grid grid-cols-2 md:grid-rows-2 p-2 md:p-0 md:flex md:flex-row md:space-x-4 md:justify-center">
             <HeaderDataItem v-for="d in data" :name="d.key" :value="d.value" />
         </div>
     </div>
