@@ -15,7 +15,39 @@ export default defineNuxtConfig({
     manifest:{
       name: "Buscoauto.com.mx",
       short_name: "buscoauto",
-      description: "Aplicacion para buscar automovil seminuevo o usado en la region"
+      description: "Aplicacion para buscar automovil seminuevo o usado en la region",
+      icons: [
+        {
+          src: "statics/icons/Icon-32.png",
+          sizes: "55x55",
+          type: "image/png"
+        },
+        {
+          src: "statics/icons/Icon-55.png",
+          sizes: "55x55",
+          type: "image/png"
+        },
+        {
+          src: "statics/icons/Icon-80.png",
+          sizes: "80x80",
+          type: "image/png"
+        },
+        {
+          src: "statics/icons/Icon-114.png",
+          sizes: "114x114",
+          type: "image/png"
+        },
+        {
+          src: "statics/icons/Icon-144.png",
+          sizes: "144x144",
+          type: "image/png"
+        },
+        {
+          src: "statics/icons/Icon-256.png",
+          sizes: "256x256",
+          type: "image/png"
+        },
+      ],
     },
     workbox:{
       navigateFallback: "/",

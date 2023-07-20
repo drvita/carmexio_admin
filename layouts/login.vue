@@ -2,7 +2,7 @@
     <section class="bg-gray-50 dark:bg-gray-900">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
             <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-                <img class="h-8 mr-2 w-8 rounded-full" src="../assets/img/logo.png" alt="logo">
+                <img class="h-8 mr-2 w-8 rounded-full" src="../assets/img/logo_w.png" alt="logo">
                 {{ company_name }}
             </a>
             <slot />
