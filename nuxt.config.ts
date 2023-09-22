@@ -80,7 +80,7 @@ export default defineNuxtConfig({
       NAME_CORP: process.env.NUXT_APP_NAME ?? "buscoauto",
     },
   },
-  app: {
-    baseURL: process.env.NUXT_ENV === "production" ? "/carmexio_admin/" : "",
-  }
+  // app: {
+  //   baseURL: process.env.NUXT_ENV === "production" ? "/carmexio_admin/" : "",
+  // }
 });

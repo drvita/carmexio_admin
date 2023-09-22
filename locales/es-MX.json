@@ -87,5 +87,9 @@
     "Sending": "Enviando",
     "Required": "Obligatorio",
     "New car": "Nuevo automovil",
-    "Edit car": "Modificar automovil"
+    "Edit car": "Modificar automovil",
+    "Edit seller": "Modificar vendedor",
+    "New seller": "Nuevo vendedor",
+    "Seller saved": "Vendedor guardado",
+    "Seller updated": "Vendedor modificado"
 }

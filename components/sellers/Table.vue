@@ -57,6 +57,11 @@
   
 <script>
 export default {
+    props: {
+        saved: {
+            type: Boolean,
+        }
+    },
     data() {
         return {
             data: [],
@@ -81,7 +86,9 @@ export default {
             }
         },
         hanleEdit(id) {
-            console.log("[DEBUG] Handle edit:", id);
+            console.log("[Sellers] Handle edit seller:", id);
+            const data = this.data.find(d => d.id === id);
+            this.$emit("onEdit", data);
         },
         hanleDelete(id) {
             const { toast_success, toast_question } = useToast();
@@ -107,7 +114,12 @@ export default {
     watch: {
         page() {
             this.getSellers();
-        }
+        },
+        saved() {
+            if (this.saved) {
+                this.getSellers();
+            }
+        },
     },
     mounted() {
         this.loading = true;

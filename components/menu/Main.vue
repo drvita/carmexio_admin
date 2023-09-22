@@ -46,8 +46,8 @@ export default {
         const menus = [
             { iconName: "wpf:statistics", text: this.$t('Dashboard'), page: "/dashboard", current: false, show: true },
             { iconName: "wpf:administrator", text: this.$t('Admins'), page: "/dashboard/admins", current: false, show: hasRoot },
-            // { iconName: "wpf:collaborator", text: this.$t('Sellers'), page: "/dashboard/sellers", current: false },
-            // { iconName: "wpf:name", text: this.$t('Customers'), page: "/dashboard/customers", current: false },
+            { iconName: "wpf:collaborator", text: this.$t('Sellers'), page: "/dashboard/sellers", current: false, show: hasRoot },
+            // { iconName: "wpf:name", text: this.$t('Customers'), page: "/dashboard/customers", current: false, show: true },
             { iconName: "wpf:car-rental", text: this.$t('Cars'), page: "/dashboard/cars", current: false, show: true },
         ];
 
@@ -55,8 +55,8 @@ export default {
             if (menus[i].page === route.path) {
                 menus[i].current = true;
             }
-
         }
+
         this.menus = menus;
     }
 }

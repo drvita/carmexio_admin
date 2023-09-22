@@ -15,7 +15,6 @@
             <div class="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
                 <AdminsTable :saved="saveAdmin" @onEdit="handleEdit" />
             </div>
-            <!-- <p v-for="n in 20" class="my-12">Paginas</p> -->
         </div>
     </NuxtLayout>
     <AdminsForm v-if="showForm" :data="dataUser" @onClose="this.showForm = false" @saved="saved = $event" />

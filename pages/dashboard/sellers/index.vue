@@ -13,10 +13,11 @@
                 </div>
             </div>
             <div class="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
-                <SellersTable />
+                <SellersTable :saved="saveSeller" @onEdit="handleEdit" />
             </div>
         </div>
     </NuxtLayout>
+    <SellersForm v-if="showForm" :data="dataUser" @onClose="this.showForm = false" @saved="saved = $event" />
 </template>
 
 <script>
@@ -25,9 +26,25 @@ definePageMeta({
 });
 
 export default {
+    data() {
+        return {
+            showForm: false,
+            saved: false,
+            dataUser: {},
+        }
+    },
     methods: {
+        handleEdit(user) {
+            this.dataUser = user;
+            this.showForm = true;
+        },
         handleAdd() {
-            console.log("[DEBUG] handle Add");
+            this.showForm = true;
+        }
+    },
+    computed: {
+        saveSeller() {
+            return !this.showForm && this.saved;
         }
     },
 }
