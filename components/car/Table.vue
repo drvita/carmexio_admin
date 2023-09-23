@@ -47,6 +47,7 @@
                 <td class="border-t border-gray-200 space-x-2">
                     <EleBtnEdit :id="d.id" @onClick="hanleEdit" />
                     <EleBtnDelete :id="d.id" @onClick="hanleDelete" />
+                    <EleBtnPdf :id="d.uuid" @onClick="downloadPdf" />
                 </td>
             </tr>
         </tbody>
@@ -70,6 +71,24 @@ export default {
         }
     },
     methods: {
+        downloadPdf(uuid) {
+            console.log("[Car] Download PDF:", uuid);
+
+            const car = new carsHlp();
+            this.loading = true;
+            car.pdf(uuid).then((data) => {
+                const file = window.URL.createObjectURL(data);
+
+                window.open(file, '_blank');
+                this.loading = false;
+            }).catch(err => {
+                console.error("[Car] error:", err?.message);
+                toast_error(this.$t('Sorry, we have error in server, try again later'));
+                this.loading = false;
+            });
+
+
+        },
         handleClickPage(page) {
             switch (page) {
                 case "next":
@@ -114,8 +133,8 @@ export default {
             const { getUser, hasRole } = useStorage();
             const user = getUser();
             const params = { page: this.page };
-            if(!hasRole('root')){
-                params.admin_id= user.id;
+            if (!hasRole('root')) {
+                params.admin_id = user.id;
             }
             const { data, meta, links } = await cars.get(0, params);
             this.data = data ?? [];

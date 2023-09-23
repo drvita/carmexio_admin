@@ -29,8 +29,10 @@ export default class ApiV1 {
     if (this.params) {
       const params = Object.keys(this.params);
       for (let i = 0; i < params.length; i++) {
-        const e: string = params[i];
-        url.searchParams.append(e, this.params[`${e}`]);
+        const params = this.params as { [key: string]: string };
+        Object.keys(params).forEach((e) => {
+          url.searchParams.append(e, params[e]);
+        });
       }
     }
 
@@ -45,7 +47,19 @@ export default class ApiV1 {
           throw await res.json();
         }
 
-        return res.json();
+        if(res.headers.get("content-type") === "application/json") {
+          return res.json();
+        }
+
+        if(res.headers.get("content-type") === "application/pdf") {
+          return res.blob();
+        }
+
+        if(res.headers.get("content-type") === "text/plain") {
+          return res.text();
+        }
+
+        return res;
       })
       .then((res) => ({
         type: "server ok",

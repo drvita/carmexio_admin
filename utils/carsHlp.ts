@@ -75,4 +75,21 @@ export default class Users extends Api {
       });
     });
   }
+
+  async pdf(uuid: string) {
+    this.method = "POST";
+    this.path = "cars/" + uuid +"/pdf";
+    this.params = {};
+    this.body = {};
+
+    return new Promise(async (done, reject) => {
+      return await this.request().then((res: Response) => {
+        if (res.type === "server error" || res.response?.errors) {
+          return reject(res);
+        }
+
+        done(res.response);
+      });
+    });
+  }
 }
