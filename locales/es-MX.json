@@ -91,5 +91,10 @@
     "Edit seller": "Modificar vendedor",
     "New seller": "Nuevo vendedor",
     "Seller saved": "Vendedor guardado",
-    "Seller updated": "Vendedor modificado"
+    "Seller updated": "Vendedor modificado",
+    "Whatsapp Phone": "Telefono (Whatsapp)",
+    "Please, type phone number of 10 digist": "Por favor, escriba un numero telefonico a 10 digitos",
+    "settings": "Ajustes",
+    "profile": "Perfil",
+    "Sorry, we have error, try again later": "Lo sentimos, tenemos un error, intentelo mas tarde."
 }

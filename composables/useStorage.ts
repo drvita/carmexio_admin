@@ -1,4 +1,4 @@
-import { User, Storage, Role } from "../interfaces/storage";
+import { User, Storage } from "../interfaces/storage";
 
 export default () => {
   const nameStorage = "carmexio";
@@ -21,6 +21,23 @@ export default () => {
     data.data = {};
     setSession(data);
   };
+  const updateDataSession = (data: User) => {
+    const dataStorage: Storage = storage.value;
+    
+    if(data.name){
+      dataStorage.data.name = data.name;
+    }
+    if(data.gender){
+      dataStorage.data.gender = data.gender;
+    }
+    if(data.phones && Array.isArray(data.phones)){
+      dataStorage.data.phones = data.phones;
+    }
+
+    localStorage.setItem(nameStorage, JSON.stringify(dataStorage));
+    storage.value = data;
+    console.log("[Storage] it was updated");
+  };
 
   const getToken = (): string => {
     const data: Storage = storage.value;
@@ -39,6 +56,7 @@ export default () => {
 
   return {
     setSession,
+    updateDataSession,
     deleteSession,
     getToken,
     getUser,

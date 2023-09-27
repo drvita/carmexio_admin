@@ -45,6 +45,7 @@ export default {
         const hasRoot = storage.hasRole('root');
         const menus = [
             { iconName: "wpf:statistics", text: this.$t('Dashboard'), page: "/dashboard", current: false, show: true },
+            { iconName: "wpf:settings", text: this.$t('settings'), page: "/settings", current: false, show: true },
             { iconName: "wpf:administrator", text: this.$t('Admins'), page: "/dashboard/admins", current: false, show: hasRoot },
             { iconName: "wpf:collaborator", text: this.$t('Sellers'), page: "/dashboard/sellers", current: false, show: hasRoot },
             // { iconName: "wpf:name", text: this.$t('Customers'), page: "/dashboard/customers", current: false, show: true },

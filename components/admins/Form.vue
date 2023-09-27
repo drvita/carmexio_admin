@@ -16,11 +16,19 @@
             </EleGroup>
 
             <EleGroup>
-                <EleLabel label="Email" to="email" :required="!form.email" />
-                <EleInput :disabled="form.id" :defaultText="form.email" id="email" type="email"
-                    placeholder="myemail@example.org" @onChange="handleFormChange" />
-            </EleGroup>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <EleLabel label="Email" to="email" :required="!form.email" />
+                        <EleInput :disabled="form.id" :defaultText="form.email" id="email" type="email"
+                            placeholder="myemail@example.org" @onChange="handleFormChange" />
+                    </div>
+                    <div>
+                        <EleLabel label="Whatsapp Phone" to="phone" :required="!form.phone" />
+                        <EleInput :defaultText="form.phone" id="phone" @onChange="handleFormChange" />
+                    </div>
+                </div>
 
+            </EleGroup>
 
             <hr class="my-4" />
             <EleDivLoading v-if="loading" />
@@ -46,6 +54,7 @@ export default {
                 name: "",
                 gender: "",
                 email: "",
+                phone: "",
             },
             loading: false,
         };
@@ -80,7 +89,7 @@ export default {
                 }).catch(err => {
                     console.error("[Admin] error put:", err?.message ?? err);
                     toast_error(this.$t('Sorry, we have error in server, try again later'));
-                    this.loading = true;
+                    this.handleClose();
                 });
                 return;
             }
@@ -104,6 +113,9 @@ export default {
                 name: this.form.name,
                 gender: this.form.gender,
                 email: this.form.email,
+                phones: [
+                    {"number": this.form.phone, "type": "whatsapp"}
+                ],
             }
         },
         handleClose() {
@@ -111,12 +123,14 @@ export default {
         },
         setData() {
             if (!this.data) return;
+            const phone = this.data.phones.find(p => p.type === "whatsapp");
 
             this.form = {
                 id: this.data.id,
                 name: this.data.name,
                 gender: this.data.gender,
                 email: this.data.email,
+                phone: phone.number,
             }
         },
     },
@@ -156,6 +170,10 @@ export default {
             }
             if (!rgEmail.test(data.email)) {
                 response.message = this.$t('Please, type a email valid');
+                return response;
+            }
+            if (data.phone.length != 10) {
+                response.message = this.$t('Please, type phone number of 10 digist');
                 return response;
             }
 

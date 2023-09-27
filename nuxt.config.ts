@@ -73,7 +73,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      API_URL: "https://api.buscoauto.com.mx",
+      API_URL: process.env.NUXT_API ?? "http://localhost:8010", // "https://api.buscoauto.com.mx",
       NAME_CORP: process.env.NUXT_APP_NAME ?? "buscoauto",
     },
   },
