@@ -150,14 +150,12 @@ export default {
         const user = storage.getUser();
         const phone = user.phones.find(p => p.type === "whatsapp");
 
-        // const admin = new adminsHlp();
-        console.log("[DEBUG] Profile:", user);
         this.form = {
             id: user.id,
             name: user.name,
             gender: user.gender,
             email: user.email,
-            phone: phone.number,
+            phone: phone?.number ? phone.number :"",
             roles: user.roles
         }
     }

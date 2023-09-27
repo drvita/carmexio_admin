@@ -130,7 +130,7 @@ export default {
                 name: this.data.name,
                 gender: this.data.gender,
                 email: this.data.email,
-                phone: phone.number,
+                phone: phone?.number ? phone.number :"",
             }
         },
     },
