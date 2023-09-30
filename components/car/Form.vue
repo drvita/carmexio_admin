@@ -7,7 +7,7 @@
             </EleGroup>
 
             <EleGroup>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-4">
                     <div>
                         <EleLabel label="Model" to="model" />
                         <EleInput id="model" :placeholder="placeholdModel" @onChange="handleFormChange" />
@@ -25,7 +25,7 @@
             </EleGroup>
 
             <EleGroup>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-4">
                     <div>
                         <EleLabel label="Status" to="status" />
                         <EleSelect :data="dataStatus" id="status" @onChange="handleFormChange" />

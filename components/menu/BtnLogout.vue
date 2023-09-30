@@ -1,13 +1,18 @@
 <template>
     <button @click="handleClick"
-        class="w-full text-white bg-primary-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+        class="md:w-full text-white bg-primary-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-1 md:px-5 md:py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
         <Icon name="wpf:shutdown" color="white" size="1rem" />
-        <span class="ml-2">{{ $t('Logout') }}</span>
+        <span v-if="!textHidden" class="ml-2">{{ $t('Logout') }}</span>
     </button>
 </template>
 
 <script>
 export default {
+    props: {
+        textHidden: {
+            type:Boolean,
+        }
+    },
     methods: {
         handleClick() {
             const { toast_error, toast_question } = useToast();

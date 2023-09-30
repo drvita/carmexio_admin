@@ -1,7 +1,7 @@
 <template>
     <EleImages :files="filesImg" :carid="carid" @onDelete="$emit('onUpload')" />
 
-    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" draggable
+    <div v-if="!loading" class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" draggable
         @dragover="dragover" @dragleave="dragleave" @drop="drop">
         <div class="text-center text-gray-600">
             <Icon name="wpf:image-file" size="4rem" />
@@ -16,6 +16,9 @@
             </div>
             <p class="text-xs leading-5">PNG, JPG, GIF {{ $t('up to') }} 10MB</p>
         </div>
+    </div>
+    <div v-else class="text-center font-semibold text-lg text-blue-800 py-4">
+        {{  $t('loading') }}
     </div>
 </template>
 
@@ -42,6 +45,7 @@ export default {
             isDragging: false,
             files: [],
             base64: [],
+            loading: false,
         };
     },
     methods: {
@@ -49,11 +53,13 @@ export default {
             if (!this.base64.length || !this.url) return;
 
             const media = new mediaHlp();
+            this.loading = true;
             media.set(this.url, this.base64).then(res => {
                 console.log("[API] Car media success upload");
                 this.base64 = [];
                 this.files = [];
                 this.$emit("onUpload");
+                this.loading = false;
             });
         },
         processFile(file, data) {

@@ -4,8 +4,13 @@
             <HeaderNavbar />
             <HeaderDataUser />
 
-            <div class="py-6 bg-white min-h-screen">
+            <div class="pb-3 md:py-6 bg-white min-h-screen">
+                <div class="md:hidden w-full h-12 p-2 mb-4 bg-gray-100 border-b-2 border-gray-800 flex space-x-2">
+                    <MenuItem v-for="m in menus" :name="m.iconName" :text="m.text" :current="m.current" text-hidden @onClick="hanleClickMenu" />
+                    <MenuBtnLogout text-hidden />
+                </div>
                 <slot />
+
             </div>
 
             <footer
@@ -16,7 +21,7 @@
             </footer>
         </div>
         <div class="hidden md:block fixed right-0 w-1/4 p-0 pl-4 h-full">
-            <MenuMain />
+            <MenuMain :menus="menus" />
         </div>
     </div>
 </template>
@@ -29,13 +34,28 @@ export default {
         html[0].classList.remove('dark');
         document.body.className = 'h-screen bg-gray-200';
     },
+    data() {
+        return {
+            menus: []
+        }
+    },
+    methods: {
+        hanleClickMenu(id) {
+            const item = this.menus.find(i => i.iconName === id);
+            return navigateTo(item.page);
+        }
+    },
     computed: {
         year() {
             return "2023";
         },
         company() {
             return "IQISS Mexico";
-        }
+        },
     },
+    mounted() {
+        const menu = useMenu();
+        this.menus = menu.getMenu(this.$t);
+    }
 }
 </script>

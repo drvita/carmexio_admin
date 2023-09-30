@@ -1,7 +1,7 @@
 <template>
-    <div :class="classCurrent" class="content-end cursor-pointer text-base" @click="handleClick">
+    <div :class="classCurrent" class="p-2 content-around md:p-0 md:border-0 md:content-end cursor-pointer text-base" @click="handleClick">
         <Icon :name="name" />
-        <span class="ml-4 truncate">{{ text }}</span>
+        <span v-if="!textHidden" class="ml-4 truncate">{{ text }}</span>
     </div>
 </template>
 <script>
@@ -20,11 +20,14 @@ export default {
         },
         current: {
             type: Boolean,
+        },
+        textHidden: {
+            type:Boolean,
         }
     },
     computed: {
         classCurrent() {
-            return this.current ? "text-blue-700 underline text-lg" : "text-blue-950";
+            return this.current ? "text-blue-700 underline text-lg border-b-4" : "text-blue-950 border-b-2";
         }
     },
     methods: {
