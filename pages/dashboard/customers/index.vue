@@ -9,11 +9,11 @@
                     </h2>
                 </div>
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                    <EleBtnAdd large @onClick="handleAdd" />
+                    <EleBtnAdd v-if="hasRoot" large @onClick="handleAdd" />
                 </div>
             </div>
-            <div class="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
-                <CustomersTable />
+            <div class="md:-mx-4 mt-4 md:mt-10 ring-1 ring-gray-300 rounded-lg">
+                <CustomersTable :hasRoot="hasRoot" />
             </div>
         </div>
     </NuxtLayout>
@@ -25,10 +25,19 @@ definePageMeta({
 });
 
 export default {
+    data(){
+        return {
+            hasRoot: false,
+        };
+    },
     methods: {
         handleAdd() {
             console.log("[DEBUG] handle Add");
         }
     },
+    mounted(){
+        const storage = useStorage();
+        this.hasRoot = storage.hasRole('root');
+    }
 }
 </script>

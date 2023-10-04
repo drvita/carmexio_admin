@@ -11,8 +11,8 @@
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
                     {{ $t('Email') }}
                 </th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
-                    {{ $t('Gender') }}
+                <th scope="col" class="hidden md:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
+                    {{ $t('Interesting') }}
                 </th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                     <span class="sr-only">{{ $t('Select') }}</span>
@@ -32,21 +32,24 @@
                 <td class="border-t border-gray-200">
                     <Icon name="wpf:name" />
 
-                    {{ d.name }}
+                    {{ d.name ? d.name : "--" }}
                 </td>
                 <td class="border-t border-gray-200 text-sm text-gray-600">
                     <Icon name="wpf:message-outline" />
 
                     {{ d.email }}
                 </td>
-                <td class="border-t border-gray-200">
-                    <Icon :name="`mdi:gender-${d.gender}`" size="1.2rem" />
+                <td class="hidden md:table-cell border-t border-gray-200">
+                    {{ d.interesting?.title }}
+                </td>
+                <!-- <td class="hidden lg:table-cell border-t border-gray-200">
+                    <Icon v-if="d.gender" :name="`mdi:gender-${d.gender}`" size="1.2rem" />
 
                     {{ $t(d.gender) }}
-                </td>
+                </td> -->
                 <td class="border-t border-gray-200 space-x-2">
-                    <EleBtnEdit :id="d.id" @onClick="hanleEdit" />
-                    <EleBtnDelete :id="d.id" @onClick="hanleDelete" />
+                    <EleBtnEdit v-if="hasRoot" :id="d.id" @onClick="hanleEdit" />
+                    <EleBtnDelete v-if="hasRoot" :id="d.id" @onClick="hanleDelete" />
                 </td>
             </tr>
         </tbody>
@@ -57,6 +60,11 @@
   
 <script>
 export default {
+    props:{
+        hasRoot: {
+            type: Boolean,
+        }
+    },
     data() {
         return {
             data: [],

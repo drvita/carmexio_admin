@@ -9,7 +9,7 @@
                     </h2>
                 </div>
                 <div class="flex space-x-2 justify-end w-full pt-2 md:pt-0">
-                    <EleBtnBack large @onClick="handleBack" class="block md:hidden" />
+                    <!-- <EleBtnBack large @onClick="handleBack" class="block md:hidden" /> -->
                     <EleBtnAdd large @onClick="handleAdd" />
                 </div>
             </div>
@@ -33,9 +33,9 @@ export default {
         }
     },
     methods: {
-        handleBack(){
-            navigateTo('/dashboard');
-        },
+        // handleBack(){
+        //     navigateTo('/dashboard');
+        // },
         handleAdd() {
             this.showForm = true;
         }
