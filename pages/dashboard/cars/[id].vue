@@ -56,6 +56,11 @@
                                 <EleCheckbox id="national" text="National" :defaultValue="form.national"
                                     @onChange="handleFormChange" />
                             </div>
+
+                            <div class="sm:col-span-4">
+                                <EleLabel label="Seller" to="seller_id" />
+                                <EleSelect :data="dataSellers" id="seller_id" @onChange="handleFormChange" />
+                            </div>
                         </div>
                     </div>
 
@@ -178,7 +183,9 @@ export default {
                 cylinders: "",
                 type: "",
                 national: false,
+                seller_id: 0,
             },
+            sellers: [],
             inputVideos: [],
             brands: [],
             brand: {},
@@ -242,10 +249,9 @@ export default {
                 console.error("[Car] error:", err?.message);
                 toast_error(this.$t('Sorry, we have error in server, try again later'));
             });
-
-
         },
         getModelData() {
+            const seller = parseInt(this.form.seller_id);
             return {
                 brand_id: this.form.brand,
                 model: this.form.model,
@@ -260,6 +266,7 @@ export default {
                 cylinders: this.form.cylinders,
                 type: this.form.type,
                 national: this.form.national,
+                seller_id: Number.isInteger(seller) && seller ? seller : null,
             }
         },
         formValidation() {
@@ -301,6 +308,7 @@ export default {
                 this.handleAddVideo(target.value, key);
                 return;
             }
+
             this.form[key] = target.value;
         },
         handleClose() {
@@ -320,7 +328,7 @@ export default {
                 this.createdBy = data?.admin ?? {};
                 this.files = data.media;
             }).catch(err => {
-                console.error("[Car] error:", err.message);
+                console.error("[Car] error:", err);
                 toast_error(this.$t('Sorry, we have error in server, try again later'));
             });
         },
@@ -342,6 +350,7 @@ export default {
                 cylinders: model.cylinders,
                 type: model.type,
                 national: Boolean(model.national),
+                seller_id: model.seller?.id ?? 0,
             };
             this.form = data;
 
@@ -359,6 +368,11 @@ export default {
             const { data } = await brands.get(0, { perpage: 200 });
             this.brands = data ?? [];
             this.load_brand = false;
+        },
+        async getSellers(){
+            const seller = new sellersHlp();
+            const sellers = await seller.get(null, {perpage: 50});
+            this.sellers = sellers?.data ?? [];
         },
     },
     computed: {
@@ -400,6 +414,17 @@ export default {
             });
             return data;
         },
+        dataSellers() {
+            const data = [...this.sellers];
+            data.map(d => {
+                if (d.id === this.form.seller_id) {
+                    d.selected = true;
+                    return;
+                }
+                d.selected = false;
+            });
+            return data;
+        },
         dataTransmition() {
             const data = [
                 { id: "automatic", name: this.$t('automatic') },
@@ -425,6 +450,7 @@ export default {
         this.form.id = route.params.id;
         this.load_brand = true;
         this.getBrands();
+        this.getSellers();
     }
 }
 </script>

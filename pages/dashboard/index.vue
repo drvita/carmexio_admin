@@ -41,7 +41,7 @@ export default {
             dashboard.analytics().then((data) => {
                 const boxs = [
                     { icon: "wpf:administrator", title: this.$t('Administrators'), number: data.admins_count, url: "/dashboard/admins", show: hasRoot },
-                    // { icon: "wpf:collaborator", title: this.$t('Sellers'), number: data.sellers_count, url: "/dashboard/sellers" },
+                    { icon: "wpf:collaborator", title: this.$t('Sellers'), number: data.sellers_count, url: "/dashboard/sellers", show: true },
                     { icon: "wpf:name", title: this.$t('Customers'), number: data.customers_count, url: "/dashboard/customers", show: true },
                     { icon: "wpf:car-rental", title: this.$t('Cars'), iconBg: "gray-200", number: data.cars_count, url: "/dashboard/cars", show: true },
                     // { icon: "wpf:coins", title: "Ventas", iconBg: "gray-200", number: 0 },
