@@ -90,6 +90,7 @@ export default {
 
         },
         handleClickPage(page) {
+            console.log("[DEBUG] Cars navigate:", page);
             switch (page) {
                 case "next":
                     this.page++;

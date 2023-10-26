@@ -1,12 +1,14 @@
 <template>
     <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
         <div class="flex flex-1 justify-between sm:hidden">
-            <a href="#"
-                class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">{{
-                    $t('Previous') }}</a>
-            <a href="#"
-                class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">{{
-                    $t('Next') }}</a>
+            <button
+                class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                @click="handleChangePage('prev')" :disabled="!meta?.links?.prev" >{{
+                    $t('Previous') }}</button> 
+            <button
+                class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                @click="handleChangePage('next')" :disabled="!meta?.links?.next" >{{
+                    $t('Next') }}</button>
         </div>
         <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
             <div>
@@ -14,14 +16,14 @@
             </div>
             <div v-if="meta.last_page > 1">
                 <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                    <PaginateBtnPrevious @onClick="handleChangePage" :disabled="!meta.links.prev" />
+                    <PaginateBtnPrevious @onClick="handleChangePage('prev')" :disabled="!meta.links.prev" />
 
                     <template v-for="n in meta.last_page">
                         <PaginateBtnPage v-if="handleShow(n)" :disabled="handleDisabled(n)" :num="n"
                             @onClick="handlePageClick" />
                     </template>
 
-                    <PaginateBtnNext @onClick="handleChangePage" :disabled="!meta.links.next" />
+                    <PaginateBtnNext @onClick="handleChangePage('next')" :disabled="!meta.links.next" />
                 </nav>
             </div>
         </div>
@@ -41,6 +43,7 @@ export default {
             this.$emit("clickPage", page);
         },
         handleChangePage(type) {
+            console.log("[DEBUG] Cars bar:", type);
             this.$emit("changePage", type);
         },
         handleDisabled(n) {
